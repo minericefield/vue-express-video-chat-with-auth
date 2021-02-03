@@ -2,6 +2,10 @@
   "name": "vue-express-video-chat_server",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "test:unit": "jest",
+    "lint": "eslint --ext ts ."
+  },
   "dependencies": {
     "express": "^4.17.1"
   },
