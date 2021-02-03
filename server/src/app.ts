@@ -3,8 +3,11 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import expressSession from 'express-session'
+import csrf from 'csurf'
 import connectRedis from 'connect-redis'
 import redis from 'redis'
+
+import { Renderers } from './routes'
 
 const app = express()
 
@@ -32,7 +35,15 @@ app.use(expressSession({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:true }))
 
+/**
+ * https://github.com/expressjs/csurf/issues/193
+ * NOTE: maybe trust proxy needed or even with trust proxy, doesn't work
+ */
+app.use(csrf({ cookie: false }))
+
 const staticDir = path.resolve(__dirname, 'public')
-app.use(express.static(staticDir))
+app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
+
+app.use(Renderers(staticDir))
 
 export default app
