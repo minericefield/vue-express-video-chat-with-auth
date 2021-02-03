@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/usr/src
+      - node_modules_client:/usr/src/node_modules
+    stdin_open: true
+    tty: true
+    ports:
+      - '8080:8080'
+    command: [yarn, serve]
+
+volumes:
+  node_modules_client:
