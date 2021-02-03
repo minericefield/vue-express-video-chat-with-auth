@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import expressSession from 'express-session'
 import connectRedis from 'connect-redis'
@@ -27,6 +28,9 @@ app.use(expressSession({
     client: redisClient
   })
 }))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended:true }))
 
 const staticDir = path.resolve(__dirname, 'public')
 app.use(express.static(staticDir))
