@@ -19,6 +19,9 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: ${NODE_ENV}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PREFIX: ${REDIS_PREFIX}
+      SESSION_SECRET: ${SESSION_SECRET}
     ports:
       - 3000:3000
     volumes:
