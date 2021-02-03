@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "fs-extra": "^9.1.0",
+    "mongoose": "^5.11.14",
     "redis": "^3.0.2"
   },
   "devDependencies": {
@@ -25,6 +26,7 @@
     "@types/express": "^4.17.11",
     "@types/express-session": "^1.17.3",
     "@types/fs-extra": "^9.0.6",
+    "@types/mongoose": "^5.10.3",
     "@types/node": "^14.14.22",
     "@types/redis": "^2.8.28",
     "@typescript-eslint/eslint-plugin": "^4.14.2",

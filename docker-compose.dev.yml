@@ -19,6 +19,10 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: ${NODE_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_AUTH_NAME: ${DB_AUTH_NAME}
+      DB_AUTH_PASSWORD: ${DB_AUTH_PASSWORD}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PREFIX: ${REDIS_PREFIX}
       SESSION_SECRET: ${SESSION_SECRET}
