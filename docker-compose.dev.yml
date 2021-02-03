@@ -31,6 +31,22 @@ services:
     stdin_open: true
     tty: true
     command: [yarn, serve]
+  
+  db:
+    image: mongo:4.4-bionic
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_AUTH_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_AUTH_PASSWORD}
+    ports:
+      - 27099:27017
+    volumes:
+      # - ./db/init.dev.js:/docker-entrypoint-initdb.d/001_users.js:ro
+      - db:/data/db
+    stdin_open: true
+    tty: true
+    # command: [mongod, --auth]
 
   redis:
     image: redis:6.0-alpine
@@ -44,3 +60,4 @@ volumes:
   node_modules_server:
   public:
   redis:
+  db:
