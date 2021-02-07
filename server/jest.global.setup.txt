@@ -1,0 +1,9 @@
+just for memo
+
+https://jestjs.io/docs/ja/setup-teardown
+
+globalSetup and globalTeardown
+Do not use globalSetup to call mongoose.connect() or mongoose.createConnection().
+Jest runs globalSetup in a separate environment, so you cannot use any connections you create in globalSetup in your tests.
+
+→ need's to init connections per each test?
