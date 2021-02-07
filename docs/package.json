@@ -10,7 +10,7 @@
     "@openapitools/openapi-generator-cli": "^2.1.19"
   },
   "$comment": [
-    "I couldn't find a way to use generated server file from below command",
+    "Couldn't find a way to use generated server file from below command",
     "generate-server > openapi-generator-cli  generate -g typescript-node -i ./openapi.yml -o ../server/src/types/swagger/"
   ]
 }
