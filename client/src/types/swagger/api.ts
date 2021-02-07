@@ -178,7 +178,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthGet(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -189,7 +189,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthPost(registrationRequest: RegistrationRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async apiAuthPost(registrationRequest: RegistrationRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthPost(registrationRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -209,7 +209,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthGet(options?: any): AxiosPromise<User> {
+        apiAuthGet(options?: any): AxiosPromise<void> {
             return localVarFp.apiAuthGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -219,7 +219,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthPost(registrationRequest: RegistrationRequest, options?: any): AxiosPromise<User> {
+        apiAuthPost(registrationRequest: RegistrationRequest, options?: any): AxiosPromise<void> {
             return localVarFp.apiAuthPost(registrationRequest, options).then((request) => request(axios, basePath));
         },
     };
