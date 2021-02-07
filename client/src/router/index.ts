@@ -10,12 +10,18 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Top',
-    component: Top
+    component: Top,
+    meta: {
+      needsAuth: true
+    }
   },
   {
     path: '/communication/:communicationHash',
     name: 'Communication',
-    component: Communication
+    component: Communication,
+    meta: {
+      needsAuth: true
+    }
   },
   {
     path: '/login',
