@@ -8,6 +8,7 @@
     "lint": "eslint --ext ts ."
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "connect-redis": "^5.0.0",
     "cookie-parser": "^1.4.5",
@@ -16,9 +17,11 @@
     "express-session": "^1.17.1",
     "fs-extra": "^9.1.0",
     "mongoose": "^5.11.14",
+    "mongoose-unique-validator": "^2.0.3",
     "redis": "^3.0.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.19.0",
     "@types/connect-redis": "^0.0.16",
     "@types/cookie-parser": "^1.4.2",
@@ -27,6 +30,7 @@
     "@types/express-session": "^1.17.3",
     "@types/fs-extra": "^9.0.6",
     "@types/mongoose": "^5.10.3",
+    "@types/mongoose-unique-validator": "^1.0.4",
     "@types/node": "^14.14.22",
     "@types/redis": "^2.8.28",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
