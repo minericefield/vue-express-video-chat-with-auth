@@ -12,10 +12,6 @@ paths:
       responses:
         '200':
           description: succeed
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
     post:
       summary: Create your account
       requestBody:
@@ -28,11 +24,6 @@ paths:
       responses:
         '200':
           description: succeed
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-            
 
 components:
   schemas:
