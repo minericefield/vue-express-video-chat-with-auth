@@ -30,6 +30,11 @@ export const Renderers = (staticDir: string) => {
   initializeDoc()
 
   router.get('/', render)
+  router.get('/communication/:communicationHash', render)
+  router.get('/login', render)
+  router.get('/register', render)
+  router.get('/verify/:userHash', render)
+  router.get('/me', render)
 
   return router
 }
