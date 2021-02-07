@@ -9,8 +9,37 @@
       <router-link to="/me">Me</router-link>
     </div>
     <router-view />
+
+    <teleport to="#loader-overlay">
+      <loader v-if="isLoaderVisible" />
+    </teleport>
   </div>
 </template>
+
+<script lang="ts">
+import {
+  defineComponent,
+  provide,
+  inject
+} from 'vue'
+
+import { useLoader, UseLoaderKey } from './modules/useLoader'
+import Loader from './components/Loader.vue'
+
+export default defineComponent({
+  components: {
+    Loader
+  },
+  setup () {
+    provide(UseLoaderKey, useLoader())
+    const { isVisible: isLoaderVisible } = inject(UseLoaderKey)
+
+    return {
+      isLoaderVisible
+    }
+  }
+})
+</script>
 
 <style lang="scss">
 #app {
