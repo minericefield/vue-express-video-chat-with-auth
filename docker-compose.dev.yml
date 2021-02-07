@@ -27,6 +27,7 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PREFIX: ${REDIS_PREFIX}
       SESSION_SECRET: ${SESSION_SECRET}
+      CRYPTO_PASSWORD: ${CRYPTO_PASSWORD}
     ports:
       - 3000:3000
     volumes:
