@@ -11,7 +11,7 @@ authRouter.get('/api/auth', async (req: Request, res: Response) => {
     await authController.isUserActive(req.session.userId)
     res.json()
   } catch (error) {
-    res.status(500).json({ someError: '' })
+    res.status(500).json()
   }
 })
 
@@ -21,6 +21,6 @@ authRouter.post('/api/auth', async (req: Request, res: Response) => {
     res.json()
   } catch (error) {
     console.log(error)
-    res.status(500).json({ someError: '' })
+    res.status(500).json()
   }
 })
