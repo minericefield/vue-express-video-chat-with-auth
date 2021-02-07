@@ -1,30 +1,30 @@
 <template>
   <div class="user-form">
     <form-text-input
-      :value="userForm.name"
+      :text="userForm.name"
       target="name"
       label="Your name"
       placeholder="Enter your name"
       :errorMessage="errorMessages.name"
-      @input="$emit('on-form-update', { name: $event })"
+      @onUpdate="$emit('on-form-update', { key: 'name', value: $event })"
     />
     <form-text-input
-      :value="userForm.email"
+      :text="userForm.email"
       type="email"
       target="email"
       label="Email address"
       placeholder="Enter your email address"
       :errorMessage="errorMessages.email"
-      @input="$emit('on-form-update', { email: $event })"
+      @onUpdate="$emit('on-form-update', { key: 'email', value: $event })"
     />
     <form-text-input
-      :value="userForm.password"
+      :text="userForm.password"
       type="password"
       target="password"
       label="Password"
       placeholder="Enter your password"
       :errorMessage="errorMessages.password"
-      @input="$emit('on-form-update', { password: $event })"
+      @onUpdate="$emit('on-form-update', { key: 'password', value: $event })"
     />
 
     <div class="text-center">
@@ -38,7 +38,7 @@
 <script lang="ts">
 import { defineComponent, reactive, PropType } from 'vue'
 
-import { User as UserForm } from '../types/Form'
+import { UserForm } from '../types/UserForm'
 import FormTextInput from '../components/FormTextInput.vue'
 
 export default defineComponent({
@@ -79,7 +79,7 @@ export default defineComponent({
     const onSubmit = () => {
       validate()
 
-      if (Object.keys(errorMessages).length === 0) {
+      if (Object.values(errorMessages).every((value) => value === '')) {
         ctx.emit('on-submit-succeed')
       }
     }

@@ -6,14 +6,14 @@
       {{ label }}
     </label>
     <input
-      :value="value"
+      :value="text"
       :type="type"
       :id="target"
       :placeholder="placeholder"
-      @input="$emit('input')"
-      class="form-control"
       :class="{ 'border-danger': errorMessage }"
-    >
+      @input.prevent="$emit('on-update', $event.target.value)"
+      class="form-control"
+    />
     <p
       v-if="errorMessage"
       class="text-danger"
@@ -29,7 +29,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'UserForm',
   props: {
-    value: {
+    text: { // with value bind, event would be called twice some how...
       type: String,
       required: true
     },
