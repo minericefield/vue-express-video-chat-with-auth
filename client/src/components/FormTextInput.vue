@@ -6,7 +6,7 @@
       {{ label }}
     </label>
     <input
-      :value="userForm.name"
+      :value="value"
       :type="type"
       :id="target"
       :placeholder="placeholder"
