@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "importHelpers": true,
     "types": ["node", "jest"],
-    "typeRoots" : ["src/types"]
+    "typeRoots" : ["node_modules/@types", "src/types"]
   },
   "include": [
     "src/**/*.ts",
