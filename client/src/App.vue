@@ -11,7 +11,7 @@
     <router-view />
 
     <teleport to="#loader-overlay">
-      <loader v-if="isLoaderVisible" />
+      <loader v-if="loader && loader.isVisible" />
     </teleport>
   </div>
 </template>
@@ -32,10 +32,12 @@ export default defineComponent({
   },
   setup () {
     provide(UseLoaderKey, useLoader())
-    const { isVisible: isLoaderVisible } = inject(UseLoaderKey)
+    const loader = inject(UseLoaderKey)
 
-    return {
-      isLoaderVisible
+    if (loader) { // https://zenn.dev/okakyo/articles/f39d5c2c328b6d provide/inject undefined...
+      return {
+        loader
+      }
     }
   }
 })
