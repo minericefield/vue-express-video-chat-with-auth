@@ -7,7 +7,7 @@ import csrf from 'csurf'
 import connectRedis from 'connect-redis'
 import redis from 'redis'
 
-import { Renderers } from './routes'
+import { Renderers, Api } from './routes'
 
 const app = express()
 
@@ -45,5 +45,6 @@ const staticDir = path.resolve(__dirname, 'public')
 app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
 
 app.use(Renderers(staticDir))
+app.use(Api.authRouter)
 
 export default app

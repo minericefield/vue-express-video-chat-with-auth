@@ -2,6 +2,11 @@ import express, { Request, Response } from 'express'
 import fs from 'fs-extra'
 import path from 'path'
 
+import {
+  redirectLoginWhenNotRegistered,
+  verify
+} from '../../middlewares/Auth'
+
 export const Renderers = (staticDir: string) => {
   const buildingMessage = 'building now...'
   let doc = ''
@@ -29,11 +34,11 @@ export const Renderers = (staticDir: string) => {
 
   initializeDoc()
 
-  router.get('/', render)
-  router.get('/communication/:communicationHash', render)
+  router.get('/', redirectLoginWhenNotRegistered, render)
+  router.get('/communication/:communicationHash', redirectLoginWhenNotRegistered, render)
   router.get('/login', render)
   router.get('/register', render)
-  router.get('/verify/:userHash', render)
+  router.get('/verify/:userHash', verify, render)
   router.get('/me', render)
 
   return router

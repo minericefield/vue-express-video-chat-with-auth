@@ -19,6 +19,7 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: ${NODE_ENV}
+      HOST: ${HOST}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_AUTH_NAME: ${DB_AUTH_NAME}
@@ -26,6 +27,8 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PREFIX: ${REDIS_PREFIX}
       SESSION_SECRET: ${SESSION_SECRET}
+      CRYPTO_PASSWORD: ${CRYPTO_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM}
     ports:
       - 3000:3000
     volumes:
@@ -58,6 +61,16 @@ services:
       - 6399:6379
     volumes:
       - redis:/data
+  
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - 8029:8025
+
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    ports:
+      - 8099:8080
 
 volumes:
   node_modules_client:

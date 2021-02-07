@@ -23,6 +23,7 @@ module.exports = {
       'warn', {
         argsIgnorePattern: '^_'
       }
-    ]
+    ],
+    'jest/valid-expect': 'off'
   }
 }

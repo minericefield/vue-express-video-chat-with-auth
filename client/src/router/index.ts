@@ -6,16 +6,24 @@ import AuthRegister from '../views/AuthRegister.vue'
 import AuthVerify from '../views/AuthVerify.vue'
 import AuthMe from '../views/AuthMe.vue'
 
+import checkAuthWhenRouteLeave from '../plugins/checkAuthWhenRouteLeave'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Top',
-    component: Top
+    component: Top,
+    meta: {
+      needsAuth: true
+    }
   },
   {
     path: '/communication/:communicationHash',
     name: 'Communication',
-    component: Communication
+    component: Communication,
+    meta: {
+      needsAuth: true
+    }
   },
   {
     path: '/login',
@@ -35,7 +43,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/me',
     name: 'AuthMe',
-    component: AuthMe
+    component: AuthMe,
+    meta: {
+      needsAuth: true
+    }
   }
 ]
 
@@ -43,5 +54,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+checkAuthWhenRouteLeave(router)
 
 export default router
