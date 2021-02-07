@@ -25,6 +25,7 @@ jobs:
       image:  node:14.15.4-alpine
       env:
         NODE_ENV: development
+        HOST: http://localhost:3000
         DB_HOST: db
         DB_NAME: vue-express-video-chat
         DB_AUTH_NAME: admin
