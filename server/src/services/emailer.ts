@@ -19,19 +19,15 @@ const sendEmailMailhog = (to: string, subject: string, content: string) => {
       html: content
     }
 
-    try {
-      smtp.sendMail(mailhogOptions, (error, info) => {
-        if (error) {
-          throw error
-        } else {
-          resolve(info)
-        }
-      })
-    } catch (error) {
-      reject(error)
-    } finally {
+    smtp.sendMail(mailhogOptions, (error, info) => {
       smtp.close()
-    }
+
+      if (error) {
+        reject(error)
+      } else {
+        resolve(info)
+      }
+    })
   })
 }
 
