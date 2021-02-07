@@ -19,6 +19,7 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       NODE_ENV: ${NODE_ENV}
+      HOST: ${HOST}
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_AUTH_NAME: ${DB_AUTH_NAME}
