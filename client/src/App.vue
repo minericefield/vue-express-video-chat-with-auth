@@ -11,17 +11,13 @@
     <router-view />
 
     <teleport to="#loader-overlay">
-      <loader v-if="loader && loader.isVisible" />
+      <loader v-if="loader.isVisible.value" />
     </teleport>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  provide,
-  inject
-} from 'vue'
+import { defineComponent, provide } from 'vue'
 
 import { useLoader, UseLoaderKey } from './modules/useLoader'
 import Loader from './components/Loader.vue'
@@ -31,13 +27,11 @@ export default defineComponent({
     Loader
   },
   setup () {
-    provide(UseLoaderKey, useLoader())
-    const loader = inject(UseLoaderKey)
+    const loader = useLoader()
+    provide(UseLoaderKey, loader)
 
-    if (loader) { // https://zenn.dev/okakyo/articles/f39d5c2c328b6d provide/inject undefined...
-      return {
-        loader
-      }
+    return {
+      loader
     }
   }
 })

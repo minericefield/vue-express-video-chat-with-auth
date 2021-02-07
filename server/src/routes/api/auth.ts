@@ -20,7 +20,6 @@ authRouter.post('/api/auth', async (req: Request, res: Response) => {
     await authController.register(req.body)
     res.json()
   } catch (error) {
-    console.log(error)
     res.status(500).json()
   }
 })
