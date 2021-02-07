@@ -58,6 +58,11 @@ services:
       - 6399:6379
     volumes:
       - redis:/data
+  
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - 8029:8025
 
 volumes:
   node_modules_client:
