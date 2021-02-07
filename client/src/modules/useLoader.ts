@@ -1,7 +1,7 @@
 import { ref, InjectionKey } from 'vue'
 
 export const useLoader = () => {
-  const isVisible = ref<boolean>(false)
+  const isVisible = ref(false)
 
   const displayLoader = (shouldBeVisible: boolean) => {
     isVisible.value = shouldBeVisible
