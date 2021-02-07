@@ -1,0 +1,11 @@
+FROM node:14.15.4-alpine
+
+ENV WORKDIR /usr/src
+
+WORKDIR $WORKDIR
+
+RUN apk update && npm install -g @vue/cli
+
+ADD package.json yarn.lock $WORKDIR/
+
+RUN yarn install --network-timeout 20000000
