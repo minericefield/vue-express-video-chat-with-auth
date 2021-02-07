@@ -1,0 +1,71 @@
+openapi: 3.0.0
+
+info:
+  title: Api Definitions
+  description: Only for Api
+  version: 0.1.0.0
+
+paths:
+  /api/auth:
+    get:
+      summary: Check if your account is active
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    post:
+      summary: Create your account
+      requestBody:
+        description: params to register account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+            
+
+components:
+  schemas:
+    RegistrationRequest:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+    User:
+      properties:
+        "_id":
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+        created:
+          type: string
+        updated:
+          type: string
+      required:
+        - "_id"
+        - name
+        - email
+        - status
+        - created
+        - updated
