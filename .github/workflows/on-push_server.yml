@@ -32,6 +32,8 @@ jobs:
         REDIS_HOST: redis
         REDIS_PREFIX: rp
         SESSION_SECRET: secret
+        CRYPTO_PASSWORD: 5799cdfa10b38bfab23118c9cbd3c8d4
+        EMAIL_FROM: vue-express-vieoChat@example.com
     steps:
       - name: checkout
         uses: actions/checkout@v2
