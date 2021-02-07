@@ -5,7 +5,7 @@
       target="name"
       label="Your name"
       placeholder="Enter your name"
-      :errorMesssage="errorMesssages.name"
+      :errorMessage="errorMessages.name"
       @input="$emit('on-form-update', { name: $event })"
     />
     <form-text-input
@@ -14,7 +14,7 @@
       target="email"
       label="Email address"
       placeholder="Enter your email address"
-      :errorMesssage="errorMesssages.email"
+      :errorMessage="errorMessages.email"
       @input="$emit('on-form-update', { email: $event })"
     />
     <form-text-input
@@ -23,20 +23,24 @@
       target="password"
       label="Password"
       placeholder="Enter your password"
-      :errorMesssage="errorMesssages.password"
+      :errorMessage="errorMessages.password"
       @input="$emit('on-form-update', { password: $event })"
     />
 
-    <button @click="submit" class="btn btn-primary">Submit</button>
+    <div class="text-center">
+      <button @click="onSubmit" class="btn btn-primary">
+        Submit
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, reactive, PropType } from 'vue'
 
+import { User as UserForm } from '../types/Form'
 import FormTextInput from '../components/FormTextInput.vue'
 
-import { UserForm } from '../types/user'
 export default defineComponent({
   name: 'UserForm',
   components: {
@@ -49,17 +53,23 @@ export default defineComponent({
     }
   },
   setup (props, ctx) {
-    let errorMessages: {[key: string]: string} = {}
+    const errorMessages = reactive({
+      name: '',
+      email: '',
+      password: ''
+    })
 
-    const validate = () => {
-      errorMessages = {}
+    const validate = () => { // TODO : make validation module
+      errorMessages.name = ''
+      errorMessages.email = ''
+      errorMessages.password = ''
 
       const { name, email, password } = props.userForm
       if (name.trim() === '') {
         errorMessages.name = 'Please enter your name'
       }
       if (email.trim() === '') { // TODO: validation for email
-        errorMessages.name = 'Please enter your email'
+        errorMessages.email = 'Please enter your email'
       }
       if (password.trim() === '') { // TODO: validation for password and confirmation
         errorMessages.password = 'Please enter your password'
@@ -70,11 +80,13 @@ export default defineComponent({
       validate()
 
       if (Object.keys(errorMessages).length === 0) {
-        ctx.emit('onSubmitSucceed')
+        ctx.emit('on-submit-succeed')
       }
     }
 
     return {
+      errorMessages,
+
       onSubmit
     }
   }
