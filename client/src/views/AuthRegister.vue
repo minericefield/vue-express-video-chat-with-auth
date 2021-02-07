@@ -12,6 +12,7 @@
 import { defineComponent, reactive, inject } from 'vue'
 
 import { UseLoaderKey } from '../modules/useLoader'
+import { UseToastingKey } from '../modules/useToasting'
 import UserForm from '../components/UserForm.vue'
 
 import AuthApi from '../api/Auth'
@@ -23,6 +24,7 @@ export default defineComponent({
   },
   setup () {
     const loader = inject(UseLoaderKey)
+    const toasting = inject(UseToastingKey)
 
     const userForm = reactive({
       name: '',
@@ -36,8 +38,13 @@ export default defineComponent({
 
     const register = async () => {
       loader?.displayLoader(true)
-      await new AuthApi().register(userForm)
+      const result = await new AuthApi().register(userForm)
       loader?.displayLoader(false)
+      if (result.succeed) {
+        toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
+      } else {
+        toasting?.displayToasting({ shouldBeVisible: true, message: 'Some Error Occured.', isError: true }) // TODO: proper error handling with server response
+      }
     }
 
     return {

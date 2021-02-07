@@ -1,13 +1,13 @@
 <template>
   <transition
-    name="toast-fade"
+    name="toasting-fade"
     @after-leave="$emit('on-left')"
     appear
   >
     <div
-      v-show="isToastVisible"
+      v-show="isVisibleLocal"
       :class="[isError ? 'bg-danger' : 'bg-success']"
-      class="toast p-2 text-white"
+      class="toasting p-2 text-white"
     >
       {{ message }}
     </div>
@@ -18,7 +18,7 @@
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
 
 export default defineComponent({
-  name: 'Toast',
+  name: 'Toasting',
   props: {
     message: {
       type: String,
@@ -30,37 +30,37 @@ export default defineComponent({
     }
   },
   setup () {
-    const isToastVisible = ref(false)
+    const isVisibleLocal = ref(false)
 
     onMounted(async () => {
       await nextTick()
-      isToastVisible.value = true
+      isVisibleLocal.value = true
       setTimeout(() => {
-        isToastVisible.value = false
-      }, 1000)
+        isVisibleLocal.value = false
+      }, 3000)
     })
 
     return {
-      isToastVisible
+      isVisibleLocal
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
-.toast {
+.toasting {
   position: fixed;
   top: 16px;
   right: 16px;
 }
 
-.toast-fade-enter-active,
-.toast-fade-leave-active {
+.toasting-fade-enter-active,
+.toasting-fade-leave-active {
   transition: all 0.5s ease;
 }
 
-.toast-fade-enter-from,
-.toast-fade-leave-to {
+.toasting-fade-enter-from,
+.toasting-fade-leave-to {
   transform: translateY(-16px);
   opacity: 0;
 }

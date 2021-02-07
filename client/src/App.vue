@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <div>
-      <router-link to="/">Top</router-link> |
-      <router-link to="/communication/hash">Communication</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/register">Regsiter</router-link> |
-      <router-link to="/verify/hash">Vefiry</router-link> |
-      <router-link to="/me">Me</router-link>
-    </div>
+  <div class="position-relative w-100 h-100">
     <router-view />
 
     <teleport to="#loader-overlay">
       <loader v-if="loader.isVisible.value" />
+    </teleport>
+    <teleport to="#toasting-overlay">
+      <toasting
+        v-if="toasting.isVisible.value"
+        :message="toasting.message.value"
+        :is-error="toasting.isError.value"
+        @on-left="toasting.displayToasting({ shouldBeVisible: false, message: '', isError: false })"
+      />
     </teleport>
   </div>
 </template>
@@ -20,18 +20,24 @@
 import { defineComponent, provide } from 'vue'
 
 import { useLoader, UseLoaderKey } from './modules/useLoader'
+import { useToasting, UseToastingKey } from './modules/useToasting'
 import Loader from './components/Loader.vue'
+import Toasting from './components/Toasting.vue'
 
 export default defineComponent({
   components: {
-    Loader
+    Loader,
+    Toasting
   },
   setup () {
     const loader = useLoader()
     provide(UseLoaderKey, loader)
+    const toasting = useToasting()
+    provide(UseToastingKey, toasting)
 
     return {
-      loader
+      loader,
+      toasting
     }
   }
 })
