@@ -12,9 +12,12 @@
       :placeholder="placeholder"
       @input="$emit('input')"
       class="form-control"
-      :class="{ 'alert': errorMessage }"
+      :class="{ 'border-danger': errorMessage }"
     >
-    <p v-if="errorMessage">
+    <p
+      v-if="errorMessage"
+      class="text-danger"
+    >
       {{ errorMessage }}
     </p>
   </div>
