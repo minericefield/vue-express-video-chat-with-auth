@@ -36,11 +36,7 @@ import { defineComponent, PropType } from 'vue'
 
 import FormTextInput from '../components/FormTextInput.vue'
 
-type UserForm = {
-  name: string;
-  email: string;
-  password: string;
-}
+import { UserForm } from '../types/user'
 export default defineComponent({
   name: 'UserForm',
   components: {
