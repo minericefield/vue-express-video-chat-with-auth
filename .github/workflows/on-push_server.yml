@@ -10,9 +10,28 @@ defaults:
 jobs:
   lint_and_test_server:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['14.15.4']
+    services:
+      db:
+        image: mongo:4.4-bionic
+        env:
+          MONGO_INITDB_DATABASE: vue-express-video-chat
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: password
+      redis:
+        image: redis:6.0-alpine
+      mailhog:
+        image: mailhog/mailhog:v1.0.1
+    container:
+      image:  node:14.15.4-alpine
+      env:
+        NODE_ENV: development
+        DB_HOST: db
+        DB_NAME: vue-express-video-chat
+        DB_AUTH_NAME: admin
+        DB_AUTH_PASSWORD: password
+        REDIS_HOST: redis
+        REDIS_PREFIX: rp
+        SESSION_SECRET: secret
     steps:
       - name: checkout
         uses: actions/checkout@v2
