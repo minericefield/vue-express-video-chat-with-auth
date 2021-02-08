@@ -47,3 +47,5 @@ export const useAuthMe = () => {
 export type AuthMe = ReturnType<typeof useAuthMe>
 
 export const UseAuthMeKey: InjectionKey<AuthMe> = Symbol('UseAuthMe')
+
+export const authMeDefault = useAuthMe()

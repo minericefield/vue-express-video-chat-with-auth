@@ -23,16 +23,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted } from 'vue'
+import { defineComponent, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { UseAuthMeKey } from '../modules/useAuthMe'
+import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 
 export default defineComponent({
   name: 'LayoutDefault',
   setup () {
     const router = useRouter()
-    const { isAuthenticated, fetchMyInfo, logout } = inject(UseAuthMeKey)
+    const { isAuthenticated, fetchMyInfo, logout } = inject(UseAuthMeKey, authMeDefault)
 
     const goProfile = () => {
       router.push({
@@ -40,7 +40,8 @@ export default defineComponent({
       })
     }
 
-    onMounted(fetchMyInfo)
+    // onMounted(fetchMyInfo)
+    fetchMyInfo()
 
     return {
       isAuthenticated,
