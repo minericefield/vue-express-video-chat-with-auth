@@ -52,6 +52,24 @@ paths:
         '200':
           description: succeed
 
+  /api/user:
+    put:
+      summary: Update user profile
+      requestBody:
+        description: params to update profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
 components:
   schemas:
     RegistrationRequest:

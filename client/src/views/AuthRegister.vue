@@ -29,7 +29,7 @@
 
     <div class="text-center">
       <button @click="onSubmit" class="btn btn-primary">
-        Submit
+        Register
       </button>
     </div>
   </div>

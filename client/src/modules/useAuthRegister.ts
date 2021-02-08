@@ -69,6 +69,7 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
     userForm,
 
     onFormUpdate,
+    validate,
     onSubmit
   }
 }
