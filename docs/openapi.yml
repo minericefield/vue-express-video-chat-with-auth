@@ -24,6 +24,18 @@ paths:
       responses:
         '200':
           description: succeed
+    put:
+      summary: Login
+      requestBody:
+        description: params to login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: succeed
 
 components:
   schemas:
@@ -37,6 +49,15 @@ components:
           type: string
       required:
         - name
+        - email
+        - password
+    LoginRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
         - email
         - password
     User:

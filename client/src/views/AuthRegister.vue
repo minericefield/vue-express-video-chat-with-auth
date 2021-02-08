@@ -1,57 +1,65 @@
 <template>
   <div class="auth-register p-5">
-    <user-form
-      :user-form="userForm"
-      @on-form-update="updateForm"
-      @on-submit-succeed="register"
+    <form-text-input
+      :text="userForm.name.text"
+      target="name"
+      label="Your name"
+      placeholder="Enter your name"
+      :errorMessage="userForm.name.errorMessage"
+      @on-update="onFormUpdate({ key: 'name', value: $event })"
     />
+    <form-text-input
+      :text="userForm.email.text"
+      type="email"
+      target="email"
+      label="Email address"
+      placeholder="Enter your email address"
+      :errorMessage="userForm.email.errorMessage"
+      @on-update="onFormUpdate({ key: 'email', value: $event })"
+    />
+    <form-text-input
+      :text="userForm.password.text"
+      type="password"
+      target="password"
+      label="Password"
+      placeholder="Enter your password"
+      :errorMessage="userForm.password.errorMessage"
+      @on-update="onFormUpdate({ key: 'password', value: $event })"
+    />
+
+    <div class="text-center">
+      <button @click="onSubmit" class="btn btn-primary">
+        Submit
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, inject } from 'vue'
+import { defineComponent, inject } from 'vue'
 
 import { UseLoaderKey } from '../modules/useLoader'
 import { UseToastingKey } from '../modules/useToasting'
-import UserForm from '../components/UserForm.vue'
+import { useAuthRegister } from '../modules/useAuthRegister'
 
-import AuthApi from '../api/Auth'
+import FormTextInput from '../components/FormTextInput.vue'
 
 export default defineComponent({
   name: 'AuthRegister',
   components: {
-    UserForm
+    FormTextInput
   },
   setup () {
     const loader = inject(UseLoaderKey)
     const toasting = inject(UseToastingKey)
 
-    const userForm = reactive({
-      name: '',
-      email: '',
-      password: ''
-    })
-
-    const updateForm = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
-      userForm[key] = value
-    }
-
-    const register = async () => {
-      loader?.displayLoader(true)
-      const result = await new AuthApi().register(userForm)
-      loader?.displayLoader(false)
-      if (result.succeed) {
-        toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
-      } else {
-        toasting?.displayToasting({ shouldBeVisible: true, message: 'Some Error Occured.', isError: true }) // TODO: proper error handling with server response
-      }
-    }
+    const { userForm, onFormUpdate, onSubmit } = useAuthRegister({ loader, toasting })
 
     return {
       userForm,
 
-      updateForm,
-      register
+      onFormUpdate,
+      onSubmit
     }
   }
 })

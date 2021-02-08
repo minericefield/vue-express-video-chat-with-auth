@@ -14,4 +14,6 @@ export const useLoader = () => {
   }
 }
 
-export const UseLoaderKey: InjectionKey<ReturnType<typeof useLoader>> = Symbol('UseLoader')
+export type Loader = ReturnType<typeof useLoader>
+
+export const UseLoaderKey: InjectionKey<Loader> = Symbol('UseLoader')

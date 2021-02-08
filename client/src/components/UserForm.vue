@@ -59,7 +59,7 @@ export default defineComponent({
       password: ''
     })
 
-    const validate = () => { // TODO : make validation module
+    const validate = () => { // TODO: make validation module
       errorMessages.name = ''
       errorMessages.email = ''
       errorMessages.password = ''

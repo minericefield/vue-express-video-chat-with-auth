@@ -1,6 +1,6 @@
 import { AxiosRequestConfig} from 'axios'
 
-import { RegistrationRequest } from '../types/swagger'
+import { RegistrationRequest, LoginRequest } from '../types/swagger'
 
 import BaseApi from './Base'
 
@@ -10,10 +10,14 @@ export default class AuthApi extends BaseApi {
   }
 
   public register (registrationRequest: RegistrationRequest) {
-    return this.request<RegistrationRequest>({ url: '', method: 'post', data: registrationRequest })
+    return this.request<RegistrationRequest>({ url: '', method: 'POST', data: registrationRequest })
   }
 
   public isUserActive () {
-    return this.request({ url: '', method: 'get' })
+    return this.request({ url: '', method: 'GET' })
+  }
+
+  public login (loginRequest: LoginRequest) {
+    return this.request<LoginRequest>({ url: '', method: 'PUT', data: loginRequest })
   }
 }

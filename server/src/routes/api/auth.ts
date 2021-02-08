@@ -23,3 +23,13 @@ authRouter.post('/api/auth', async (req: Request, res: Response) => {
     res.status(500).json()
   }
 })
+
+authRouter.put('/api/auth', async (req: Request, res: Response) => {
+  try {
+    const userDoc = await authController.login(req.body)
+    req.session.userId = userDoc._id
+    res.json()
+  } catch (error) {
+    res.status(500).json()
+  }
+})

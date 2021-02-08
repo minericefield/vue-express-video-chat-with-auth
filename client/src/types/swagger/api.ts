@@ -24,6 +24,25 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface LoginRequest
+ */
+export interface LoginRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginRequest
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LoginRequest
+     */
+    password: string;
+}
+/**
+ * 
+ * @export
  * @interface RegistrationRequest
  */
 export interface RegistrationRequest {
@@ -162,6 +181,42 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Login
+         * @param {LoginRequest} loginRequest params to login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthPut: async (loginRequest: LoginRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'loginRequest' is not null or undefined
+            assertParamExists('apiAuthPut', 'loginRequest', loginRequest)
+            const localVarPath = `/api/auth`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(loginRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -193,6 +248,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthPost(registrationRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Login
+         * @param {LoginRequest} loginRequest params to login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthPut(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthPut(loginRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -221,6 +287,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         apiAuthPost(registrationRequest: RegistrationRequest, options?: any): AxiosPromise<void> {
             return localVarFp.apiAuthPost(registrationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Login
+         * @param {LoginRequest} loginRequest params to login
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.apiAuthPut(loginRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -253,6 +329,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiAuthPost(registrationRequest: RegistrationRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiAuthPost(registrationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Login
+     * @param {LoginRequest} loginRequest params to login
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiAuthPut(loginRequest: LoginRequest, options?: any) {
+        return DefaultApiFp(this.configuration).apiAuthPut(loginRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

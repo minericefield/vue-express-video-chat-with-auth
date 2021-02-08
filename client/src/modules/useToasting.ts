@@ -20,4 +20,6 @@ export const useToasting = () => {
   }
 }
 
-export const UseToastingKey: InjectionKey<ReturnType<typeof useToasting>> = Symbol('UseToasting')
+export type Toasting = ReturnType<typeof useToasting>
+
+export const UseToastingKey: InjectionKey<Toasting> = Symbol('UseToasting')
