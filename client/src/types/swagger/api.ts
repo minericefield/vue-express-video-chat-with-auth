@@ -68,45 +68,21 @@ export interface RegistrationRequest {
 /**
  * 
  * @export
- * @interface User
+ * @interface UserResponse
  */
-export interface User {
+export interface UserResponse {
     /**
      * 
      * @type {string}
-     * @memberof User
-     */
-    _id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
+     * @memberof UserResponse
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof UserResponse
      */
     email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    status: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    created: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    updated: string;
 }
 
 /**
@@ -115,6 +91,36 @@ export interface User {
  */
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Logout
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthDelete: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/auth`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @summary Check if your account is active
@@ -217,6 +223,42 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Update user profile
+         * @param {RegistrationRequest} registrationRequest params to update profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserPut: async (registrationRequest: RegistrationRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registrationRequest' is not null or undefined
+            assertParamExists('apiUserPut', 'registrationRequest', registrationRequest)
+            const localVarPath = `/api/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(registrationRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -229,11 +271,21 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Logout
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthDelete(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthDelete(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Check if your account is active
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthGet(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -255,8 +307,19 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthPut(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAuthPut(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthPut(loginRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update user profile
+         * @param {RegistrationRequest} registrationRequest params to update profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiUserPut(registrationRequest: RegistrationRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserPut(registrationRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -271,11 +334,20 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @summary Logout
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthDelete(options?: any): AxiosPromise<void> {
+            return localVarFp.apiAuthDelete(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Check if your account is active
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthGet(options?: any): AxiosPromise<void> {
+        apiAuthGet(options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -295,8 +367,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<void> {
+        apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthPut(loginRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update user profile
+         * @param {RegistrationRequest} registrationRequest params to update profile
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserPut(registrationRequest: RegistrationRequest, options?: any): AxiosPromise<UserResponse> {
+            return localVarFp.apiUserPut(registrationRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -308,6 +390,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @summary Logout
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiAuthDelete(options?: any) {
+        return DefaultApiFp(this.configuration).apiAuthDelete(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Check if your account is active
@@ -341,6 +434,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiAuthPut(loginRequest: LoginRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiAuthPut(loginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update user profile
+     * @param {RegistrationRequest} registrationRequest params to update profile
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiUserPut(registrationRequest: RegistrationRequest, options?: any) {
+        return DefaultApiFp(this.configuration).apiUserPut(registrationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -7,7 +7,7 @@
     <div
       v-show="isVisibleLocal"
       :class="[isError ? 'bg-danger' : 'bg-success']"
-      class="toasting p-2 text-white"
+      class="toasting position-fixed p-2 text-white"
     >
       {{ message }}
     </div>
@@ -49,9 +49,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .toasting {
-  position: fixed;
   top: 16px;
-  right: 16px;
+  left: 16px;
 }
 
 .toasting-fade-enter-active,

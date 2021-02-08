@@ -23,3 +23,5 @@ export const useToasting = () => {
 export type Toasting = ReturnType<typeof useToasting>
 
 export const UseToastingKey: InjectionKey<Toasting> = Symbol('UseToasting')
+
+export const toastingDefault = useToasting()

@@ -46,5 +46,6 @@ app.use(express.static(staticDir, { index: 'none' })) // disable default static 
 
 app.use(Renderers(staticDir))
 app.use(Api.authRouter)
+app.use(Api.userRouter)
 
 export default app

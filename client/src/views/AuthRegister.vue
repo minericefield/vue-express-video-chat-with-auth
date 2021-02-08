@@ -1,5 +1,9 @@
 <template>
   <div class="auth-register p-5">
+    <h2 class="mb-4">
+      Register
+    </h2>
+
     <form-text-input
       :text="userForm.name.text"
       target="name"
@@ -29,17 +33,24 @@
 
     <div class="text-center">
       <button @click="onSubmit" class="btn btn-primary">
-        Submit
+        Register
       </button>
     </div>
+
+    <router-link 
+      to="/login"
+      class="d-block mt-4 mr-auto font-weight-bold text-info text-center under-lined cursor-pointer"
+    >
+      Go back to login
+    </router-link>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
 
-import { UseLoaderKey } from '../modules/useLoader'
-import { UseToastingKey } from '../modules/useToasting'
+import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
+import { UseToastingKey, toastingDefault } from '../modules/useToasting'
 import { useAuthRegister } from '../modules/useAuthRegister'
 
 import FormTextInput from '../components/FormTextInput.vue'
@@ -50,8 +61,8 @@ export default defineComponent({
     FormTextInput
   },
   setup () {
-    const loader = inject(UseLoaderKey)
-    const toasting = inject(UseToastingKey)
+    const loader = inject(UseLoaderKey, loaderDefault)
+    const toasting = inject(UseToastingKey, toastingDefault)
 
     const { userForm, onFormUpdate, onSubmit } = useAuthRegister({ loader, toasting })
 

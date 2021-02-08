@@ -5,7 +5,7 @@ import { Toasting } from './useToasting'
 
 import AuthApi from '../api/Auth'
 
-export const useAuthRegister = ({ loader, toasting }: { loader?: Loader; toasting?: Toasting }) => {
+export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting: Toasting }) => {
   const userForm = reactive({
     name: {
       text: '',
@@ -42,18 +42,18 @@ export const useAuthRegister = ({ loader, toasting }: { loader?: Loader; toastin
   }
 
   const register = async () => {
-    loader?.displayLoader(true)
+    loader.displayLoader(true)
     const params = {
       name: userForm.name.text,
       email: userForm.email.text,
       password: userForm.password.text
     }
     const result = await new AuthApi().register(params)
-    loader?.displayLoader(false)
+    loader.displayLoader(false)
     if (result.succeed) {
-      toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
+      toasting.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
     } else {
-      toasting?.displayToasting({ shouldBeVisible: true, message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
+      toasting.displayToasting({ shouldBeVisible: true, message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
     }
   }
 
@@ -69,6 +69,7 @@ export const useAuthRegister = ({ loader, toasting }: { loader?: Loader; toastin
     userForm,
 
     onFormUpdate,
+    validate,
     onSubmit
   }
 }
