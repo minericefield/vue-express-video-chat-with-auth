@@ -23,7 +23,6 @@ export const useAuthRegister = ({ loader, toasting }: { loader?: Loader; toastin
 
   const onFormUpdate = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
     userForm[key].text = value
-    console.log(userForm)
   }
 
   const validate = () => { // TODO: make validation module
@@ -54,7 +53,7 @@ export const useAuthRegister = ({ loader, toasting }: { loader?: Loader; toastin
     if (result.succeed) {
       toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
     } else {
-      toasting?.displayToasting({ shouldBeVisible: true, message: 'Some Error Occured.', isError: true }) // TODO: proper error handling with server response
+      toasting?.displayToasting({ shouldBeVisible: true, message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
     }
   }
 

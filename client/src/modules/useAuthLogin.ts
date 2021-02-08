@@ -21,7 +21,6 @@ export const useAuthLogin = ({ loader, toasting }: { loader?: Loader; toasting?:
 
   const onFormUpdate = ({ key, value }: { key: 'email' | 'password'; value: string }) => {
     userForm[key].text = value
-    console.log(userForm)
   }
 
   const validate = () => { // TODO: make validation module
