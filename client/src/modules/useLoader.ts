@@ -17,3 +17,5 @@ export const useLoader = () => {
 export type Loader = ReturnType<typeof useLoader>
 
 export const UseLoaderKey: InjectionKey<Loader> = Symbol('UseLoader')
+
+export const loaderDefault = useLoader()

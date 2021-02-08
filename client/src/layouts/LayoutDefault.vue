@@ -32,7 +32,7 @@ export default defineComponent({
   name: 'LayoutDefault',
   setup () {
     const router = useRouter()
-    const { isAuthenticated, fetchMyInfo, logout } = inject(UseAuthMeKey, authMeDefault)
+    const { isAuthenticated, logout } = inject(UseAuthMeKey, authMeDefault)
 
     const goProfile = () => {
       router.push({
@@ -41,7 +41,6 @@ export default defineComponent({
     }
 
     // onMounted(fetchMyInfo)
-    fetchMyInfo()
 
     return {
       isAuthenticated,

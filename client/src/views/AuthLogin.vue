@@ -30,8 +30,9 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
 
-import { UseLoaderKey } from '../modules/useLoader'
-import { UseToastingKey } from '../modules/useToasting'
+import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
+import { UseToastingKey, toastingDefault } from '../modules/useToasting'
+import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 import { useAuthLogin } from '../modules/useAuthLogin'
 
 import FormTextInput from '../components/FormTextInput.vue'
@@ -42,10 +43,11 @@ export default defineComponent({
     FormTextInput
   },
   setup () {
-    const loader = inject(UseLoaderKey)
-    const toasting = inject(UseToastingKey)
+    const loader = inject(UseLoaderKey, loaderDefault)
+    const toasting = inject(UseToastingKey, toastingDefault)
+    const { updateMyInfo } = inject(UseAuthMeKey, authMeDefault)
 
-    const { userForm, onFormUpdate, onSubmit } = useAuthLogin({ loader, toasting })
+    const { userForm, onFormUpdate, onSubmit } = useAuthLogin({ loader, toasting }, updateMyInfo)
 
     return {
       userForm,
