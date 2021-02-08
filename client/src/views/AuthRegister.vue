@@ -1,10 +1,37 @@
 <template>
   <div class="auth-register p-5">
-    <user-form
-      :user-form="userForm"
-      @on-form-update="updateForm"
-      @on-submit-succeed="register"
+    <form-text-input
+      :text="userForm.name.text"
+      target="name"
+      label="Your name"
+      placeholder="Enter your name"
+      :errorMessage="userForm.name.errorMessage"
+      @on-update="onFormUpdate({ key: 'name', value: $event })"
     />
+    <form-text-input
+      :text="userForm.email.text"
+      type="email"
+      target="email"
+      label="Email address"
+      placeholder="Enter your email address"
+      :errorMessage="userForm.email.errorMessage"
+      @on-update="onFormUpdate({ key: 'email', value: $event })"
+    />
+    <form-text-input
+      :text="userForm.password.text"
+      type="password"
+      target="password"
+      label="Password"
+      placeholder="Enter your password"
+      :errorMessage="userForm.password.errorMessage"
+      @on-update="onFormUpdate({ key: 'password', value: $event })"
+    />
+
+    <div class="text-center">
+      <button @click="onSubmit" class="btn btn-primary">
+        Submit
+      </button>
+    </div>
   </div>
 </template>
 
@@ -13,32 +40,62 @@ import { defineComponent, reactive, inject } from 'vue'
 
 import { UseLoaderKey } from '../modules/useLoader'
 import { UseToastingKey } from '../modules/useToasting'
-import UserForm from '../components/UserForm.vue'
+import FormTextInput from '../components/FormTextInput.vue'
 
 import AuthApi from '../api/Auth'
 
 export default defineComponent({
   name: 'AuthRegister',
   components: {
-    UserForm
+    FormTextInput
   },
   setup () {
     const loader = inject(UseLoaderKey)
     const toasting = inject(UseToastingKey)
 
     const userForm = reactive({
-      name: '',
-      email: '',
-      password: ''
+      name: {
+        text: '',
+        errorMessage: ''
+      },
+      email: {
+        text: '',
+        errorMessage: ''
+      },
+      password: {
+        text: '',
+        errorMessage: ''
+      }
     })
 
-    const updateForm = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
-      userForm[key] = value
+    const onFormUpdate = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
+      userForm[key].text = value
+    }
+
+    const validate = () => { // TODO: make validation module
+      userForm.name.errorMessage = ''
+      userForm.email.errorMessage = ''
+      userForm.password.errorMessage = ''
+
+      if (userForm.name.text.trim() === '') {
+        userForm.name.errorMessage = 'Please enter your name'
+      }
+      if (userForm.email.text.trim() === '') { // TODO: validation for email
+        userForm.email.errorMessage = 'Please enter your email address'
+      }
+      if (userForm.password.text.trim() === '') { // TODO: validation for password and confirmation
+        userForm.password.errorMessage = 'Please enter your password'
+      }
     }
 
     const register = async () => {
       loader?.displayLoader(true)
-      const result = await new AuthApi().register(userForm)
+      const params = {
+        name: userForm.name.text,
+        email: userForm.email.text,
+        password: userForm.password.text
+      }
+      const result = await new AuthApi().register(params)
       loader?.displayLoader(false)
       if (result.succeed) {
         toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
@@ -47,10 +104,14 @@ export default defineComponent({
       }
     }
 
+    const onSubmit = () => {
+      validate()
+    }
+
     return {
       userForm,
 
-      updateForm,
+      onFormUpdate,
       register
     }
   }
