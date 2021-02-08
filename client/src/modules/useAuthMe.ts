@@ -19,6 +19,7 @@ export const useAuthMe = () => {
 
   const fetchMyInfo = async () => {
     const result = await new AuthApi().isUserActive()
+    console.log({ result })
     if (result.succeed) {
       updateMyInfo({ isAuthenticated: true, name: result.data.name, email: result.data.email })
     } else {
