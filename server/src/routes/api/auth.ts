@@ -39,3 +39,8 @@ authRouter.put('/api/auth', async (req: Request, res: Response) => {
     res.status(500).json()
   }
 })
+
+authRouter.delete('/api/auth', async (req: Request, res: Response) => {
+  req.session.userId = null
+  res.json()
+})

@@ -1,5 +1,7 @@
 import { reactive, InjectionKey, toRefs } from 'vue'
 
+import router from '../router/'
+
 import AuthApi from '../api/Auth'
 
 export const useAuthMe = () => {
@@ -24,11 +26,20 @@ export const useAuthMe = () => {
     }
   }
 
+  const logout = async () => {
+    const result = await new AuthApi().logout()
+    if (result.succeed) {
+      updateMyInfo({ isAuthenticated: false, name: '', email: '' })
+      router.push({ name: 'AuthLogin' })
+    }
+  }
+
   return {
     ...toRefs(me),
 
     fetchMyInfo,
-    updateMyInfo
+    updateMyInfo,
+    logout
   }
 }
 

@@ -24,19 +24,20 @@
 
 <script lang="ts">
 import { defineComponent, inject, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { UseAuthMeKey } from '../modules/useAuthMe'
 
 export default defineComponent({
   name: 'LayoutDefault',
   setup () {
-    const { isAuthenticated, fetchMyInfo } = inject(UseAuthMeKey)
+    const router = useRouter()
+    const { isAuthenticated, fetchMyInfo, logout } = inject(UseAuthMeKey)
 
     const goProfile = () => {
-      // TODO
-    }
-    const logout = () => {
-      // TODO
+      router.push({
+        name: 'AuthMe'
+      })
     }
 
     onMounted(fetchMyInfo)

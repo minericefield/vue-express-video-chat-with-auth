@@ -20,4 +20,8 @@ export default class AuthApi extends BaseApi {
   public login (loginRequest: LoginRequest) {
     return this.request<LoginRequest, UserResponse>({ url: '', method: 'PUT', data: loginRequest })
   }
+
+  public logout () {
+    return this.request({ url: '', method: 'DELETE' })
+  }
 }

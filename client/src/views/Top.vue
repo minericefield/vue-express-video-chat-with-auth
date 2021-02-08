@@ -15,8 +15,6 @@ export default defineComponent({
   name: 'Top',
   components: {
     LayoutDefault
-  },
-  setup () {
   }
 })
 </script>
