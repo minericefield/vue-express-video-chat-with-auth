@@ -2,12 +2,13 @@
   <div class="layout-default d-flex flex-column position-relative w-100 h-100">
     <nav class="layout-default-header navbar navbar-expand-lg justify-content-end align-items-center navbar-light bg-light">
       <p
+        v-if="routeName !== 'Top'"
         @click="goTop"
         class="font-weight-bold text-info mr-auto mb-0 under-lined cursor-pointer">
         Go Back to Top
       </p>
       <button
-        v-if="isAuthenticated"
+        v-if="isAuthenticated && routeName !== 'AuthMe'"
         @click="goProfile"
         class="btn btn-primary mr-2"
       >
@@ -29,13 +30,14 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 
 export default defineComponent({
   name: 'LayoutDefault',
   setup () {
+    const route = useRoute()
     const router = useRouter()
     const { isAuthenticated, logout } = inject(UseAuthMeKey, authMeDefault)
 
@@ -55,6 +57,7 @@ export default defineComponent({
 
     return {
       isAuthenticated,
+      routeName: route.name,
 
       goTop,
       goProfile,
