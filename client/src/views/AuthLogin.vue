@@ -30,11 +30,8 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue'
 
-// import router from '../router/'
-
 import { UseLoaderKey } from '../modules/useLoader'
 import { UseToastingKey } from '../modules/useToasting'
-// import { UseAuthMeKey } from '../modules/useAuthMe'
 import { useAuthLogin } from '../modules/useAuthLogin'
 
 import FormTextInput from '../components/FormTextInput.vue'
@@ -47,17 +44,6 @@ export default defineComponent({
   setup () {
     const loader = inject(UseLoaderKey)
     const toasting = inject(UseToastingKey)
-    // const { updateMyInfo } = inject(UseAuthMeKey)
-
-    // const onLoginSucceed = ({ name, email }: { name: string; email: string }) => {
-    //   toasting?.displayToasting({ shouldBeVisible: true, message: 'Login succeed.', isError: false })
-    //   updateMyInfo({ isAuthenticated: true, name, email })
-    //   router.push({ name: 'Top' })
-    // }
-
-    // const onLoginFailed = () => {
-
-    // }
 
     const { userForm, onFormUpdate, onSubmit } = useAuthLogin({ loader, toasting })
 
