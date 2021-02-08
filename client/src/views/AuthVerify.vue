@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-verify">
+  <div class="auth-verify d-flex flex-column align-items-center justify-content-center p-5">
     <h3 class="mb-4">
       Verification completed!
     </h3>
