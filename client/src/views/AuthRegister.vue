@@ -36,13 +36,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, inject } from 'vue'
+import { defineComponent, inject } from 'vue'
 
 import { UseLoaderKey } from '../modules/useLoader'
 import { UseToastingKey } from '../modules/useToasting'
-import FormTextInput from '../components/FormTextInput.vue'
+import { useAuthRegister } from '../modules/useAuthRegister'
 
-import AuthApi from '../api/Auth'
+import FormTextInput from '../components/FormTextInput.vue'
 
 export default defineComponent({
   name: 'AuthRegister',
@@ -53,66 +53,13 @@ export default defineComponent({
     const loader = inject(UseLoaderKey)
     const toasting = inject(UseToastingKey)
 
-    const userForm = reactive({
-      name: {
-        text: '',
-        errorMessage: ''
-      },
-      email: {
-        text: '',
-        errorMessage: ''
-      },
-      password: {
-        text: '',
-        errorMessage: ''
-      }
-    })
-
-    const onFormUpdate = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
-      userForm[key].text = value
-    }
-
-    const validate = () => { // TODO: make validation module
-      userForm.name.errorMessage = ''
-      userForm.email.errorMessage = ''
-      userForm.password.errorMessage = ''
-
-      if (userForm.name.text.trim() === '') {
-        userForm.name.errorMessage = 'Please enter your name'
-      }
-      if (userForm.email.text.trim() === '') { // TODO: validation for email
-        userForm.email.errorMessage = 'Please enter your email address'
-      }
-      if (userForm.password.text.trim() === '') { // TODO: validation for password and confirmation
-        userForm.password.errorMessage = 'Please enter your password'
-      }
-    }
-
-    const register = async () => {
-      loader?.displayLoader(true)
-      const params = {
-        name: userForm.name.text,
-        email: userForm.email.text,
-        password: userForm.password.text
-      }
-      const result = await new AuthApi().register(params)
-      loader?.displayLoader(false)
-      if (result.succeed) {
-        toasting?.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
-      } else {
-        toasting?.displayToasting({ shouldBeVisible: true, message: 'Some Error Occured.', isError: true }) // TODO: proper error handling with server response
-      }
-    }
-
-    const onSubmit = () => {
-      validate()
-    }
+    const { userForm, onFormUpdate, onSubmit } = useAuthRegister({ loader, toasting })
 
     return {
       userForm,
 
       onFormUpdate,
-      register
+      onSubmit
     }
   }
 })
