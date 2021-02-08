@@ -1,10 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse, CancelTokenSource, Method } from 'axios'
 import urlJoin from 'url-join'
 
-type Response = {
+type Response <T> = {
   succeed: boolean;
   canceled: boolean;
-} & AxiosResponse
+} & AxiosResponse<T>
 
 export default class BaseApi {
   private config = {
@@ -33,8 +33,8 @@ export default class BaseApi {
     this.axios = axios.create(this.config)
   }
 
-  protected async request <T> ({ url, method, data }: { url: string; method: Method; data?: T }) {
-    let response: Response
+  protected async request <T, U> ({ url, method, data }: { url: string; method: Method; data?: T }) {
+    let response: Response<U>
 
     try {
       if (method.toLocaleLowerCase() === 'get') {
@@ -55,13 +55,13 @@ export default class BaseApi {
     return response
   }
 
-  protected async requestCancelable <T> ({ url, method, data, key }: { url?: string; method: 'GET' | 'get'; key: string; data?: T }) {
+  protected async requestCancelable <T, U> ({ url, method, data, key }: { url?: string; method: 'GET' | 'get'; key: string; data?: T }) {
     if (this.cancelTokenSources[key]) {
       this.cancelTokenSources[key].cancel()
     }
     this.cancelTokenSources[key] = axios.CancelToken.source()
 
-    let response!: Response
+    let response!: Response<U>
 
     try {
       response = await this.axios.request({ url, method, params: data })

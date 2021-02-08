@@ -12,6 +12,10 @@ paths:
       responses:
         '200':
           description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
     post:
       summary: Create your account
       requestBody:
@@ -24,6 +28,7 @@ paths:
       responses:
         '200':
           description: succeed
+          
     put:
       summary: Login
       requestBody:
@@ -36,6 +41,10 @@ paths:
       responses:
         '200':
           description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
 
 components:
   schemas:
@@ -60,24 +69,12 @@ components:
       required:
         - email
         - password
-    User:
+    UserResponse:
       properties:
-        "_id":
-          type: string
         name:
           type: string
         email:
           type: string
-        status:
-          type: string
-        created:
-          type: string
-        updated:
-          type: string
       required:
-        - "_id"
         - name
         - email
-        - status
-        - created
-        - updated

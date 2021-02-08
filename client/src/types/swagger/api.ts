@@ -68,45 +68,21 @@ export interface RegistrationRequest {
 /**
  * 
  * @export
- * @interface User
+ * @interface UserResponse
  */
-export interface User {
+export interface UserResponse {
     /**
      * 
      * @type {string}
-     * @memberof User
-     */
-    _id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
+     * @memberof UserResponse
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof User
+     * @memberof UserResponse
      */
     email: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    status: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    created: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof User
-     */
-    updated: string;
 }
 
 /**
@@ -233,7 +209,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAuthGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthGet(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -255,7 +231,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiAuthPut(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async apiAuthPut(loginRequest: LoginRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthPut(loginRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -275,7 +251,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthGet(options?: any): AxiosPromise<void> {
+        apiAuthGet(options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -295,7 +271,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<void> {
+        apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthPut(loginRequest, options).then((request) => request(axios, basePath));
         },
     };
