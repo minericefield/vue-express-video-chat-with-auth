@@ -1,6 +1,11 @@
 <template>
   <div class="layout-default d-flex flex-column position-relative w-100 h-100">
-    <nav class="layout-default-header navbar navbar-expand-lg justify-content-end navbar-light bg-light">
+    <nav class="layout-default-header navbar navbar-expand-lg justify-content-end align-items-center navbar-light bg-light">
+      <p
+        @click="goTop"
+        class="font-weight-bold text-info mr-auto mb-0 under-lined cursor-pointer">
+        Go Back to Top
+      </p>
       <button
         v-if="isAuthenticated"
         @click="goProfile"
@@ -34,6 +39,12 @@ export default defineComponent({
     const router = useRouter()
     const { isAuthenticated, logout } = inject(UseAuthMeKey, authMeDefault)
 
+    const goTop = () => {
+      router.push({
+        name: 'Top'
+      })
+    }
+
     const goProfile = () => {
       router.push({
         name: 'AuthMe'
@@ -45,6 +56,7 @@ export default defineComponent({
     return {
       isAuthenticated,
 
+      goTop,
       goProfile,
       logout
     }
