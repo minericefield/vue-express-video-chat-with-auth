@@ -45,6 +45,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+    
+    delete:
+      summary: Logout
+      responses:
+        '200':
+          description: succeed
 
 components:
   schemas:
