@@ -1,5 +1,9 @@
 <template>
   <div class="auth-register p-5">
+    <h2 class="mb-4">
+      Register
+    </h2>
+
     <form-text-input
       :text="userForm.name.text"
       target="name"
@@ -32,6 +36,13 @@
         Register
       </button>
     </div>
+
+    <router-link 
+      to="/login"
+      class="d-block mt-4 mr-auto font-weight-bold text-info text-center under-lined cursor-pointer"
+    >
+      Go back to login
+    </router-link>
   </div>
 </template>
 

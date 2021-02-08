@@ -43,7 +43,6 @@ const UserSchema = new Schema({
   }
 })
 
-// MEMO: https://stackoverflow.com/questions/38945608/custom-error-messages-with-mongoose
 UserSchema.plugin(uniqueValidator);
 
 /**
@@ -52,11 +51,19 @@ UserSchema.plugin(uniqueValidator);
  * https://stackoverflow.com/questions/65163605/typescript-throws-compilation-error-in-mongoose-pre-hook-expected-1-arguments
  */
 UserSchema.pre('save', function (next) {
-  /* eslint-disable-next-line @typescript-eslint/no-this-alias */
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const user = this as any
-  bcrypt.hash(user.password, 10,  (error, hash) => {        
+  bcrypt.hash(user.password, 10,  (_, hash) => {        
     user.password = hash 
+    next()
+  })
+})
+
+UserSchema.pre('updateOne', function (next) {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  const user = this as any
+  bcrypt.hash(user._update.$set.password, 10,  (_, hash) => { // I bet this is incorrect way     
+    user._update.$set.password = hash 
     next()
   })
 })

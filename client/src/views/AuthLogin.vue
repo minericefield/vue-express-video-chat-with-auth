@@ -1,5 +1,9 @@
 <template>
   <div class="auth-login p-5">
+    <h2 class="mb-4">
+      Login
+    </h2>
+
     <form-text-input
       :text="userForm.email.text"
       type="email"
@@ -24,6 +28,13 @@
         Submit
       </button>
     </div>
+
+    <router-link 
+      to="/register"
+      class="d-block mt-4 mr-auto font-weight-bold text-info text-center under-lined cursor-pointer"
+    >
+      Or you can register your account from here
+    </router-link>
   </div>
 </template>
 

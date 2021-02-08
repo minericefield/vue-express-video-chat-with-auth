@@ -25,6 +25,7 @@ export default class AuthController extends UserController {
   }
 
   public async register (user: Partial<UserDoc>) {
+    // TODO: email duplication error message https://stackoverflow.com/questions/38945608/custom-error-messages-with-mongoose
     const userDoc = await this.create(user)
     await this.sendVerifyEmail(userDoc)
 
