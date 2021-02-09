@@ -8,8 +8,7 @@ export const userRouter = express.Router()
 
 userRouter.put('/api/user', async (req: Request, res: Response) => {
   try {
-    const userId = await userController.update(req.session.userId, req.body)
-    const userDoc = await userController.show(userId)
+    const userDoc = await userController.updateProfile(req.session.userId, req.body)
     res.json({
       name: userDoc.name,
       email: userDoc.email
