@@ -6,3 +6,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 //   app.use(BootstrapVue)
 //   app.use(IconsPlugin)
 // }
+
+import 'material-icons/css/material-icons.css'
+import 'material-icons/iconfont/material-icons.css'
