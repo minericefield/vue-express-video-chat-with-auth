@@ -1,6 +1,6 @@
 <template>
   <div
-    class="circle-icon-button position-relative overflow-hidden cursor-pointer"
+    class="circle-icon-button position-relative overflow-hidden rounded-circle cursor-pointer"
     @click="$emit('on-click')"
   >
     <i class="circle-icon-button-icon material-icons position-absolute color-black">
@@ -9,7 +9,7 @@
     <transition name="disabled-overlay-fade">
       <div
         v-show="!isActive"
-        class="circle-icon-button-disabled-overlay position-absolute w-100 h-100"
+        class="circle-icon-button-disabled-overlay position-absolute w-100 h-100 rounded-circle"
       />
     </transition>
   </div>
@@ -40,14 +40,12 @@ export default defineComponent({
   height: 48px;
   min-height: 48px;
   border: solid 2px rgba(74, 74, 74, .9);
-  border-radius: 100%;
   &-icon {
     top: 50%;
     left: 51%;
     transform: translateY(-50%) translateX(-50%);
   }
   &-disabled-overlay {
-    border-radius: 100%;
     background-color: rgba(74, 74, 74, .4);
     &::after {
       position: absolute;

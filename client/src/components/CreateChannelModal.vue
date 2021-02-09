@@ -10,7 +10,7 @@
     >
       <div
         v-show="isModalContentVisible"
-        class="modal-content"
+        class="modal-content mt-n4"
       >
         <div class="modal-header">
           <h5 class="modal-title">

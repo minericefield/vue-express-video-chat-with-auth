@@ -3,9 +3,14 @@
     <nav class="navbar navbar-expand-lg">
       <button
         @click="isCreateChannelModalVisible = true"
-        class="btn btn-primary"
+        class="btn btn-info d-flex"
       >
-        Start Video
+        <i class="material-icons mr-1">
+          video_call
+        </i>
+        <p class="mb-0">
+          Start Video
+        </p>
       </button>
     </nav>
 
