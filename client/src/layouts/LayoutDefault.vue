@@ -10,16 +10,26 @@
       <button
         v-if="isAuthenticated && routeName !== 'AuthMe'"
         @click="goProfile"
-        class="btn btn-primary mr-2"
+        class="btn btn-primary d-flex mr-2"
       >
-        Profile
+        <i class="material-icons mr-1">
+          manage_accounts
+        </i>
+        <p class="mb-0">
+          Profile
+        </p>
       </button>
       <button
         v-if="isAuthenticated"
         @click="logout"
-        class="btn btn-danger"
+        class="btn btn-danger d-flex"
       >
-        Logout
+        <i class="material-icons mr-1">
+          logout
+        </i>
+        <p class="mb-0">
+          Logout
+        </p>
       </button>
     </nav>
     <div class="layout-default-body flex-grow-1">

@@ -21,6 +21,7 @@ import { defineComponent, provide } from 'vue'
 import { useLoader, UseLoaderKey } from './modules/useLoader'
 import { useToasting, UseToastingKey } from './modules/useToasting'
 import { useAuthMe, UseAuthMeKey } from './modules/useAuthMe'
+import { useVideoSettings, UseVideoSettingsKey } from './modules/useVideoSettings'
 import Loader from './components/Loader.vue'
 import Toasting from './components/Toasting.vue'
 
@@ -36,8 +37,11 @@ export default defineComponent({
     provide(UseToastingKey, toasting)
     const authMe = useAuthMe()
     provide(UseAuthMeKey, authMe)
+    const videoSettings = useVideoSettings()
+    provide(UseVideoSettingsKey, videoSettings)
 
     authMe.fetchMyInfo()
+    videoSettings.restoreSettings()
 
     return {
       loader,

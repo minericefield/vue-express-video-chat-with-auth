@@ -53,19 +53,20 @@ UserSchema.plugin(uniqueValidator);
 UserSchema.pre('save', function (next) {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const user = this as any
-  bcrypt.hash(user.password, 10,  (_, hash) => {        
+  bcrypt.hash(user.password, 10,  (_, hash) => {
     user.password = hash 
     next()
   })
 })
 
-UserSchema.pre('updateOne', function (next) {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  const user = this as any
-  bcrypt.hash(user._update.$set.password, 10,  (_, hash) => { // I bet this is incorrect way     
-    user._update.$set.password = hash 
-    next()
-  })
-})
+// do in here will effect verifying
+// UserSchema.pre('updateOne', function (next) {
+//   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+//   const user = this as any
+//   bcrypt.hash(user._update.$set.password, 10,  (_, hash) => { // I bet this is incorrect way     
+//     user._update.$set.password = hash 
+//     next()
+//   })
+// })
 
 export default mongoose.model<UserDoc>('User', UserSchema)

@@ -11,8 +11,8 @@
       :id="target"
       :placeholder="placeholder"
       :class="{ 'border-danger': errorMessage }"
-      @input.prevent="$emit('on-update', $event.target.value)"
       class="form-control"
+      @input.prevent="$emit('on-update', $event.target.value)"
     />
     <p
       v-if="errorMessage"

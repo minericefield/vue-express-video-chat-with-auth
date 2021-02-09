@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 # Additions
 *prod*
+agora.config.ts
