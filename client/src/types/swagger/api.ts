@@ -76,6 +76,12 @@ export interface UserResponse {
      * @type {string}
      * @memberof UserResponse
      */
+    _id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
     name: string;
     /**
      * 

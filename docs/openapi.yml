@@ -95,10 +95,13 @@ components:
         - password
     UserResponse:
       properties:
+        _id:
+          type: string
         name:
           type: string
         email:
           type: string
       required:
+        - _id
         - name
         - email
