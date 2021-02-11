@@ -25,11 +25,11 @@ export const Renderers = (staticDir: string) => {
   const render = async (req: Request, res: Response) => {
     if (doc === buildingMessage) await initializeDoc()
 
-    doc = doc.replace(
-      '<meta name="csrf-token" content="">', 
+    const generatedDoc = doc.replace(
+      `<meta name="csrf-token" content="">`, 
       `<meta name="csrf-token" content="${req.csrfToken()}">`
     )
-    res.send(doc)
+    res.send(generatedDoc)
   }
 
   initializeDoc()
