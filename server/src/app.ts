@@ -43,7 +43,7 @@ app.use(express.static(staticDir, { index: 'none' })) // disable default static 
  * NOTE: maybe trust proxy needed or even with trust proxy, doesn't work
  */
 app.set('trust proxy', true)
-app.use(csrf({ cookie: false }))
+app.use(csrf({ cookie: true }))
 
 app.use(Renderers(staticDir))
 app.use(Api.authRouter)
