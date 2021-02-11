@@ -7,12 +7,14 @@ import AuthApi from '../api/Auth'
 export const useAuthMe = () => {
   const me = reactive({
     isAuthenticated: false,
+    _id: '',
     name: '',
     email: ''
   })
 
-  const updateMyInfo = ({ isAuthenticated, name, email }: { isAuthenticated: boolean; name: string; email: string }) => {
+  const updateMyInfo = ({ isAuthenticated, _id, name, email }: { isAuthenticated: boolean; _id?: string; name: string; email: string }) => {
     me.isAuthenticated = isAuthenticated
+    _id === undefined ? me._id = '' : me._id = _id
     me.name = name
     me.email = email
   }
@@ -20,7 +22,7 @@ export const useAuthMe = () => {
   const fetchMyInfo = async () => {
     const result = await new AuthApi().isUserActive()
     if (result.succeed) {
-      updateMyInfo({ isAuthenticated: true, name: result.data.name, email: result.data.email })
+      updateMyInfo({ isAuthenticated: true, _id: result.data._id, name: result.data.name, email: result.data.email })
     } else {
       updateMyInfo({ isAuthenticated: false, name: '', email: '' })
     }
