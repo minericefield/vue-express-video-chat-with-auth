@@ -10,6 +10,7 @@ userRouter.put('/api/user', async (req: Request, res: Response) => {
   try {
     const userDoc = await userController.updateProfile(req.session.userId, req.body)
     res.json({
+      _id: userDoc._id,
       name: userDoc.name,
       email: userDoc.email
     })
