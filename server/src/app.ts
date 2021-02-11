@@ -35,14 +35,15 @@ app.use(expressSession({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:true }))
 
+const staticDir = path.resolve(__dirname, 'public')
+app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
+
 /**
  * https://github.com/expressjs/csurf/issues/193
  * NOTE: maybe trust proxy needed or even with trust proxy, doesn't work
  */
+app.set('trust proxy', true)
 app.use(csrf({ cookie: false }))
-
-const staticDir = path.resolve(__dirname, 'public')
-app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
 
 app.use(Renderers(staticDir))
 app.use(Api.authRouter)
