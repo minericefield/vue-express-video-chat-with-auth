@@ -1,8 +1,10 @@
-import { Stream, StreamSpec, createStream } from 'agora-rtc-sdk'
-import { reactive, ref, Ref, computed } from 'vue'
+import { StreamSpec, createStream } from 'agora-rtc-sdk'
+import { Ref, ToRefs, ref, computed } from 'vue'
+
+import { State as VideoSettingsState } from './useVideoSettings'
 
 // TODO: handle with attendance
-export const useAgoraStream = (myId: Ref<string>, { isAudioOn, isVideoOn }: { isAudioOn: Ref<boolean>; isVideoOn: Ref<boolean> }) => {
+export const useAgoraStream = (myId: Ref<string>, { isAudioOn, isVideoOn }: ToRefs<VideoSettingsState>) => {
   const streamSpec = computed<StreamSpec>(() => {
     return {
       streamID: myId.value,
@@ -12,17 +14,14 @@ export const useAgoraStream = (myId: Ref<string>, { isAudioOn, isVideoOn }: { is
     }
   })
 
-  const myStream = ref<Stream>(createStream(streamSpec.value))
-
-  const updateStreamSpec = ({ audio, video }: Partial<StreamSpec>) => { // maybe better to handle with computed
-    // NOTE: way to merge https://stackoverflow.com/questions/64099203/vue-how-to-merge-two-reactive-objects-without-loosing-reactivity
-    if (audio !== undefined) streamSpec.audio = audio
-    if (video !== undefined) streamSpec.video = video
+  const myStream = ref(createStream(streamSpec.value))
+  const reCreateStream = () => {
+    myStream.value = createStream(streamSpec.value)
   }
 
-  const updateMyStream = () => {
-    myStream.value = createStream(streamSpec)
-  }
+  // const myStream = computed<Stream>(() => {
+  //   return createStream(streamSpec.value)
+  // })
 
   const subscribeAccessHandledEvent = (onAllowed: () => void, onDenied: () => void) => {
      myStream.value.on('accessAllowed', onAllowed)
@@ -40,8 +39,7 @@ export const useAgoraStream = (myId: Ref<string>, { isAudioOn, isVideoOn }: { is
   return {
     myStream,
 
-    updateStreamSpec,
-    updateMyStream,
+    reCreateStream,
     subscribeAccessHandledEvent,
     init
   }
