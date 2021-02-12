@@ -32,7 +32,7 @@
         </p>
       </button>
     </nav>
-    <div class="layout-default-body flex-grow-1">
+    <div class="layout-default-body flex-grow-1 h-100">
       <slot />
     </div>
   </div>

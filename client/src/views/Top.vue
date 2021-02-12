@@ -41,7 +41,7 @@ export default defineComponent({
     const isCreateChannelModalVisible = ref(false)
     const ruter = useRouter()
 
-    // TODO: request server and get hash form server
+    // TODO: request server and get hash
     const joinChannel = (channelName: string) => {
       isCreateChannelModalVisible.value = false
       ruter.push({ name: 'Communication', params: { communicationHash: channelName } })

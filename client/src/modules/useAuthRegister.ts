@@ -51,9 +51,9 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
     const result = await new AuthApi().register(params)
     loader.displayLoader(false)
     if (result.succeed) {
-      toasting.displayToasting({ shouldBeVisible: true, message: 'Please check your email to verify your account.', isError: false })
+      toasting.displayToasting({ message: 'Please check your email to verify your account.', isError: false })
     } else {
-      toasting.displayToasting({ shouldBeVisible: true, message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
+      toasting.displayToasting({ message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
     }
   }
 
