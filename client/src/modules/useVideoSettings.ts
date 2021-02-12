@@ -1,7 +1,7 @@
 import { reactive, toRefs, InjectionKey } from 'vue'
 import { get, set } from 'local-storage'
 
-type State = {
+export type State = {
   isAudioOn: boolean;
   isVideoOn: boolean;
 }
