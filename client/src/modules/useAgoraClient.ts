@@ -8,15 +8,17 @@ const config: ClientConfig = {
   codec: 'h264'
 }
 
-export const useAgoraClient = () => {
+export const useAgoraClient = (myId: Ref<string>) => {
   const client = ref(createClient(config))
-  const myId = ref<number | null>(null)
+  // const myId ...
 
-  const join = (channelName: string) => new Promise<Ref<number | null>>((resolve, reject) => {
-    client.value.join(appId, channelName, myId.value, undefined, (generatedMyId) => {
-      myId.value = generatedMyId
-      resolve(myId) // no need to resolve(myId)
+  const join = (channelName: string) => new Promise<void>((resolve, reject) => {
+    client.value.join(appId, channelName, myId.value, undefined, () => {
+      // myId.value = generatedMyId
+      // resolve(myId)
+      resolve()
     }, (error) => {
+      console.log({error})
       reject(error)
     })
   })
@@ -30,14 +32,6 @@ export const useAgoraClient = () => {
     })
   })
 
-  // const init = () => new Promise<void>((resolve, reject) => {
-  //   client.value.init(appId, () => {
-  //     resolve()
-  //   }, (error) => {
-  //     reject(error)
-  //   })
-  // })
-
   const exit = (myStream: Stream) => new Promise<void>((resolve, reject) => {
     client.value.unpublish(myStream)
     myStream.close()
@@ -50,7 +44,6 @@ export const useAgoraClient = () => {
 
   return {
     client,
-    myId,
 
     init,
     exit
