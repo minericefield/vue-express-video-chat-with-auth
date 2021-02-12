@@ -3,7 +3,7 @@
     class="circle-icon-button position-relative overflow-hidden rounded-circle cursor-pointer"
     @click="$emit('on-click')"
   >
-    <i class="circle-icon-button-icon material-icons position-absolute color-black">
+    <i class="circle-icon-button-icon material-icons position-absolute">
       {{ icon }}
     </i>
     <transition name="disabled-overlay-fade">
