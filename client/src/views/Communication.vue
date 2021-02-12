@@ -1,32 +1,36 @@
 <template>
   <layout-default>
-    <div class="communication">
-      <div class="communication-body">
+    <transition name="communication-fade" appear>
+      <div class="communication d-flex flex-column h-100">
+        <communication-body
+          :stream-list="streamList"
+          class="flex-grow-1 w-100"
+        />
+
+        <div class="communication-footer d-flex align-items-center justify-content-evenly p-2 border-top">
+          <circle-icon-button
+            icon="mic"
+            :is-active="isAudioOn"
+            @on-click="onAttendeeControllerClick('audio')"
+          />
+          <circle-icon-button
+            icon="videocam"
+            :is-active="isVideoOn"
+            @on-click="onAttendeeControllerClick('video')"
+          />
+          <circle-icon-button
+            icon="disabled_by_default"
+            @on-click="router.push({ name: 'Top' })"
+          />
+        </div>
       </div>
-      <div class="communication-footer d-flex align-items-center justify-content-spece-between p-2">
-        <circle-icon-button
-          icon="mic"
-          :is-active="isAudioOn"
-          @on-click="onAttendeeControllerClick('audio')"
-        />
-        <circle-icon-button
-          icon="videocam"
-          :is-active="isVideoOn"
-          @on-click="onAttendeeControllerClick('video')"
-        />
-        <circle-icon-button
-          icon="videocam"
-          :is-active="isVideoOn"
-          @on-click="updateSettings({ isVideoOn: !isVideoOn})"
-        />
-      </div>
-    </div>
+    </transition>
   </layout-default>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, inject } from 'vue'
-import { useRoute } from 'vue-router'
+import { defineComponent, ref, onMounted, inject } from 'vue'
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 
 import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
@@ -38,24 +42,26 @@ import { useAgoraStreamList } from '../modules/useAgoraStreamList'
 
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import CircleIconButton from '../components/CircleIconButton.vue'
+import CommunicationBody from '../components/CommunicationBody.vue'
 
 export default defineComponent({
   name: 'Communication',
   components: {
     LayoutDefault,
-    CircleIconButton
+    CircleIconButton,
+    CommunicationBody
   },
   setup () {
     const loader = inject(UseLoaderKey, loaderDefault)
     const toasting = inject(UseToastingKey, toastingDefault)
     const { isAudioOn, isVideoOn, updateSettings: updateVideoSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const { _id: myId } = inject(UseAuthMeKey, authMeDefault)
-    const route = useRoute()
-    const channelName = route.params.communicationHash as string // TODO : use server response
+    const router = useRouter()
+    const channelName = useRoute().params.communicationHash as string // TODO: use server response
     const isMediaPermissionAlertModalVisible = ref(false)
 
     const { client, init: initClient, exit } = useAgoraClient(myId)
-    const { myStream, updateStreamSpec, updateMyStream, subscribeAccessHandledEvent, init: initStream } = useAgoraStream(myId)
+    const { myStream, subscribeAccessHandledEvent, init: initStream, reCreateStream } = useAgoraStream(myId, { isAudioOn, isVideoOn })
     const { streamList, addStream, removeStream } = useAgoraStreamList()
 
     const subscribeStreamEvents = () => {
@@ -73,13 +79,37 @@ export default defineComponent({
       })
     }
 
+    const initMe = async () => {
+      await initStream()
+      addStream(myStream.value, true)
+      client.value.publish(myStream.value)
+    }
+
     const onAttendeeControllerClick = async (type: 'audio' | 'video') => {
+      const startOver = async () => {
+        loader.displayLoader(true)
+        client.value.unpublish(myStream.value)
+        removeStream(myStream.value.getId())
+        reCreateStream()
+        await initMe()
+        loader.displayLoader(false)
+      }
+
       if (type === 'audio') {
         updateVideoSettings({ isAudioOn: !isAudioOn.value })
-        if (myStream.value.hasAudio() === false) {
-          loader.displayLoader(true)
-          client.value.unpublish(myStream.value)
-          await initStream()
+        if (myStream.value.hasAudio()) {
+          isAudioOn.value ? myStream.value.unmuteAudio() : myStream.value.muteAudio()
+        } else {
+          await startOver()
+        }
+      }
+
+      if (type === 'video') {
+        updateVideoSettings({ isVideoOn: !isVideoOn.value })
+        if (myStream.value.hasVideo()) {
+          isVideoOn.value ? myStream.value.unmuteVideo() : myStream.value.muteVideo()
+        } else {
+          await startOver()
         }
       }
     }
@@ -88,31 +118,51 @@ export default defineComponent({
       subscribeStreamEvents()
       await initClient(channelName)
 
-      updateStreamSpec({ audio: isAudioOn.value, video: isVideoOn.value })
-      updateMyStream()
       subscribeAccessHandledEvent(() => {
         toasting.displayToasting({ message: 'Thank you for permitting your device' })
       }, () => {
         isMediaPermissionAlertModalVisible.value = true
       })
-      await initStream()
-      addStream(myStream.value, true)
-      client.value.publish(myStream.value)
+      await initMe()
     })
 
-    onBeforeUnmount(async () => {
+    onBeforeRouteLeave(async (_, __, next) => {
       loader.displayLoader(true)
-      await exit(myStream.value)
-      loader.displayLoader(false)
+      try {
+        await exit(myStream.value)
+      } catch (error) {
+        // 
+      } finally {
+        loader.displayLoader(false)
+        next()
+      }
     })
 
     return {
+      router, 
+
       isAudioOn,
       isVideoOn,
+      streamList,
 
-
-      streamList
+      onAttendeeControllerClick
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.communication {
+  &-footer {
+    min-height: 64px;
+  }
+}
+.communication-fade-enter-from
+.communication-fade-leave-to {
+  transform: translateX(100vw);
+}
+.communication-fade-enter-active
+.communication-fade-leave-active {
+  transition: transform ease 10s;
+}
+</style>

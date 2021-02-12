@@ -14,7 +14,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Top',
     component: Top,
     meta: {
-      needsAuth: true
+      needsAuth: true,
+      belongingLayout: 'default'
     }
   },
   {
@@ -22,30 +23,44 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Communication',
     component: Communication,
     meta: {
-      needsAuth: true
+      needsAuth: true,
+      belongingLayout: 'default'
     }
   },
   {
     path: '/login',
     name: 'AuthLogin',
-    component: AuthLogin
+    component: AuthLogin,
+    meta: {
+      needsAuth: false,
+      belongingLayout: 'nothing'
+    }
   },
   {
     path: '/register',
     name: 'AuthRegister',
-    component: AuthRegister
+    component: AuthRegister,
+    meta: {
+      needsAuth: false,
+      belongingLayout: 'nothing'
+    }
   },
   {
     path: '/verify/:userHash',
     name: 'AuthVerify',
-    component: AuthVerify
+    component: AuthVerify,
+    meta: {
+      needsAuth: false,
+      belongingLayout: 'nothing'
+    }
   },
   {
     path: '/me',
     name: 'AuthMe',
     component: AuthMe,
     meta: {
-      needsAuth: true
+      needsAuth: true,
+      belongingLayout: 'default'
     }
   }
 ]
