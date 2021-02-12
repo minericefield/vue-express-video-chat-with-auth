@@ -7,16 +7,23 @@ export const useToasting = () => {
     isError: false
   })
 
-  const displayToasting = ({ shouldBeVisible, message, isError }: { shouldBeVisible: boolean; message: string; isError: boolean }) => {
-    state.isVisible = shouldBeVisible
+  const displayToasting = ({ message, isError = false }: { message: string; isError?: boolean }) => {
+    state.isVisible = true
     state.message = message
     state.isError = isError
+  }
+
+  const hideToasting = () => {
+    state.isVisible = false
+    state.message = ''
+    state.isError = false
   }
   
   return {
     ...toRefs(state),
 
-    displayToasting
+    displayToasting,
+    hideToasting
   }
 }
 

@@ -9,7 +9,7 @@
         v-if="toasting.isVisible.value"
         :message="toasting.message.value"
         :is-error="toasting.isError.value"
-        @on-left="toasting.displayToasting({ shouldBeVisible: false, message: '', isError: false })"
+        @on-left="toasting.hideToasting"
       />
     </teleport>
   </div>
