@@ -71,6 +71,6 @@ export default defineComponent({
 
 .disabled-overlay-fade-enter-active,
 .disabled-overlay-fade-leave-active  {
-  transition: opacity ease .4s 0s;
+  transition: opacity ease .2s 0s;
 }
 </style>
