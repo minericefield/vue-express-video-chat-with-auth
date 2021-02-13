@@ -5,6 +5,7 @@ export type State = {
   isAudioOn: boolean;
   isVideoOn: boolean;
 }
+
 export const useVideoSettings = () => {
   const state = reactive<State>({
     isAudioOn: true,
