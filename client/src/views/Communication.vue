@@ -1,30 +1,28 @@
 <template>
   <layout-default>
-    <transition name="communication-fade" appear>
-      <div class="communication d-flex flex-column h-100">
-        <communication-body
-          :stream-list="streamList"
-          class="flex-grow-1 w-100"
-        />
+    <div class="communication d-flex flex-column h-100">
+      <communication-body
+        :stream-list="streamList"
+        class="flex-grow-1 w-100"
+      />
 
-        <div class="communication-footer d-flex align-items-center justify-content-evenly p-2 border-top">
-          <circle-icon-button
-            icon="mic"
-            :is-active="isAudioOn"
-            @on-click="onAttendeeControllerClick('audio')"
-          />
-          <circle-icon-button
-            icon="videocam"
-            :is-active="isVideoOn"
-            @on-click="onAttendeeControllerClick('video')"
-          />
-          <circle-icon-button
-            icon="disabled_by_default"
-            @on-click="router.push({ name: 'Top' })"
-          />
-        </div>
+      <div class="communication-footer d-flex align-items-center justify-content-evenly p-2 border-top">
+        <circle-icon-button
+          icon="mic"
+          :is-active="isAudioOn"
+          @on-click="onAttendeeControllerClick('audio')"
+        />
+        <circle-icon-button
+          icon="videocam"
+          :is-active="isVideoOn"
+          @on-click="onAttendeeControllerClick('video')"
+        />
+        <circle-icon-button
+          icon="disabled_by_default"
+          @on-click="router.push({ name: 'Top' })"
+        />
       </div>
-    </transition>
+    </div>
   </layout-default>
 </template>
 
@@ -156,13 +154,5 @@ export default defineComponent({
   &-footer {
     min-height: 64px;
   }
-}
-.communication-fade-enter-from
-.communication-fade-leave-to {
-  transform: translateX(100vw);
-}
-.communication-fade-enter-active
-.communication-fade-leave-active {
-  transition: transform ease 10s;
 }
 </style>
