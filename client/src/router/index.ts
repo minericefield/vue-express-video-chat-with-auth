@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Top,
     meta: {
       needsAuth: true,
-      belongingLayout: 'default'
+      needsTransitIn: 'default'
     }
   },
   {
@@ -24,7 +24,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Communication,
     meta: {
       needsAuth: true,
-      belongingLayout: 'default'
+      needsTransitIn: 'default'
     }
   },
   {
@@ -33,7 +33,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AuthLogin,
     meta: {
       needsAuth: false,
-      belongingLayout: 'nothing'
+      needsTransitIn: 'nothing'
     }
   },
   {
@@ -42,7 +42,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AuthRegister,
     meta: {
       needsAuth: false,
-      belongingLayout: 'nothing'
+      needsTransitIn: 'nothing'
     }
   },
   {
@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AuthVerify,
     meta: {
       needsAuth: false,
-      belongingLayout: 'nothing'
+      needsTransitIn: 'nothing'
     }
   },
   {
@@ -60,7 +60,7 @@ const routes: Array<RouteRecordRaw> = [
     component: AuthMe,
     meta: {
       needsAuth: true,
-      belongingLayout: 'default'
+      needsTransitIn: 'default'
     }
   }
 ]
