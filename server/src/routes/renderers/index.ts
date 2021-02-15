@@ -35,7 +35,7 @@ export const Renderers = (staticDir: string) => {
   initializeDoc()
 
   router.get('/', redirectLoginWhenNotRegistered, render)
-  router.get('/communication/:communicationHash', redirectLoginWhenNotRegistered, render)
+  router.get('/communication/:channelName', redirectLoginWhenNotRegistered, render)
   router.get('/login', render)
   router.get('/register', render)
   router.get('/verify/:userHash', verify, render)

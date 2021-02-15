@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/communication/:communicationHash',
+    path: '/communication/:channelName',
     name: 'Communication',
     component: Communication,
     meta: {

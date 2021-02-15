@@ -21,7 +21,7 @@ app.use(expressSession({
   secret: process.env.SESSION_SECRET,
   cookie: {
     maxAge: 24 * 60 * 60 * 100 * 100,
-    secure: false, // TODO: activate secure on production maybe
+    secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict'
   },
   saveUninitialized: false,

@@ -45,7 +45,7 @@ export default defineComponent({
 
     const joinChannel = (channelName: string) => {
       isCreateChannelModalVisible.value = false
-      router.push({ name: 'Communication', params: { communicationHash: channelName } })
+      router.push({ name: 'Communication', params: { channelName } })
     }
 
     return {

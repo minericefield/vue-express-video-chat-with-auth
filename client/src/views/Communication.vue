@@ -59,7 +59,7 @@ export default defineComponent({
     const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey)
 
     const router = useRouter()
-    const channelName = useRoute().params.communicationHash as string // TODO: use server response
+    const channelName = useRoute().params.channelName as string
     const isMediaPermissionAlertModalVisible = ref(false)
 
     const { client, init: initClient, exit } = useAgoraClient(myId)
