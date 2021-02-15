@@ -27,9 +27,13 @@ export default defineComponent({
     isError: {
       type: Boolean,
       default: false
+    },
+    duration: {
+      type: Number,
+      default: 3000
     }
   },
-  setup () {
+  setup (props) {
     const isVisibleLocal = ref(false)
 
     onMounted(async () => {
@@ -37,7 +41,7 @@ export default defineComponent({
       isVisibleLocal.value = true
       setTimeout(() => {
         isVisibleLocal.value = false
-      }, 3000)
+      }, props.duration)
     })
 
     return {
@@ -49,8 +53,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .toasting {
-  top: 16px;
-  left: 16px;
+  top: 24px;
+  left: 24px;
 }
 
 .toasting-fade-enter-active,

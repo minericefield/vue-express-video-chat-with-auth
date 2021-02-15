@@ -22,7 +22,7 @@
       <button
         v-if="isAuthenticated"
         @click="logout"
-        class="btn btn-danger d-flex"
+        class="btn btn-secondary d-flex"
       >
         <i class="material-icons mr-1">
           logout
@@ -32,7 +32,7 @@
         </p>
       </button>
     </nav>
-    <div class="layout-default-body flex-grow-1">
+    <div class="layout-default-body flex-grow-1 h-100">
       <slot />
     </div>
   </div>

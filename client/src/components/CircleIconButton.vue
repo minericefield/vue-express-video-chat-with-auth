@@ -3,7 +3,7 @@
     class="circle-icon-button position-relative overflow-hidden rounded-circle cursor-pointer"
     @click="$emit('on-click')"
   >
-    <i class="circle-icon-button-icon material-icons position-absolute color-black">
+    <i class="circle-icon-button-icon material-icons position-absolute">
       {{ icon }}
     </i>
     <transition name="disabled-overlay-fade">
@@ -71,6 +71,6 @@ export default defineComponent({
 
 .disabled-overlay-fade-enter-active,
 .disabled-overlay-fade-leave-active  {
-  transition: opacity ease .4s 0s;
+  transition: opacity ease .2s 0s;
 }
 </style>

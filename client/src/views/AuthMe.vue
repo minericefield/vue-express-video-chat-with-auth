@@ -74,13 +74,13 @@ export default defineComponent({
           password: userForm.password.text
         }
         const result = await new UserApi().update(params)
-        loader.displayLoader(false)
         if (result.succeed) {
-          toasting.displayToasting({ shouldBeVisible: true, message: 'Profile successfully updated.', isError: false })
-          updateMyInfo({ isAuthenticated: true, name: result.data.name, email: result.data.email })
+          toasting.displayToasting({ message: 'Profile successfully updated.' })
+          updateMyInfo(true, result.data)
         } else {
-          toasting.displayToasting({ shouldBeVisible: true, message: 'Updating failed.', isError: true }) // TODO: proper error handling with server response
+          toasting.displayToasting({ message: 'Updating failed.', isError: true }) // TODO: proper error handling with server response
         }
+        loader.displayLoader(false)
       }
     }
 

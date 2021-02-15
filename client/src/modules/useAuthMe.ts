@@ -1,36 +1,54 @@
 import { reactive, InjectionKey, toRefs } from 'vue'
 
+import { UserResponse } from '../types/swagger/'
+
 import router from '../router/'
 
 import AuthApi from '../api/Auth'
 
+export type Me = {
+  isAuthenticated: boolean;
+  _id: string;
+  name: string;
+  email: string;
+}
+
 export const useAuthMe = () => {
-  const me = reactive({
+  const me = reactive<Me>({
     isAuthenticated: false,
+    _id: '',
     name: '',
     email: ''
   })
 
-  const updateMyInfo = ({ isAuthenticated, name, email }: { isAuthenticated: boolean; name: string; email: string }) => {
+  const updateMyInfo = (isAuthenticated: boolean, userResponse: UserResponse) => {
     me.isAuthenticated = isAuthenticated
-    me.name = name
-    me.email = email
+    me._id = userResponse._id
+    me.name = userResponse.name
+    me.email = userResponse.email
+  }
+
+  const resetMyInfo = () => {
+    me.isAuthenticated = false
+    me._id = ''
+    me.name = ''
+    me.email = ''
   }
 
   const fetchMyInfo = async () => {
     const result = await new AuthApi().isUserActive()
     if (result.succeed) {
-      updateMyInfo({ isAuthenticated: true, name: result.data.name, email: result.data.email })
+      updateMyInfo(true, result.data)
     } else {
-      updateMyInfo({ isAuthenticated: false, name: '', email: '' })
+      resetMyInfo()
     }
   }
 
   const logout = async () => {
     const result = await new AuthApi().logout()
     if (result.succeed) {
-      updateMyInfo({ isAuthenticated: false, name: '', email: '' })
-      router.push({ name: 'AuthLogin' })
+      await router.push({ name: 'AuthLogin' })
+      resetMyInfo()
     }
   }
 

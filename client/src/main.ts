@@ -7,5 +7,6 @@ import store from './store'
 import './assets/styles/index.scss'
 
 import './plugins/bootstrap'
+import './plugins/materialIcons'
 
 createApp(App).use(store).use(router).mount('#app')

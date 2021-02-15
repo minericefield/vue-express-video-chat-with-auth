@@ -9,3 +9,12 @@
 .bg-overlay-color {
   background-color: rgba(74, 74, 74, .4);
 }
+
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+
+.justify-content-evenly {
+  justify-content: space-evenly;
+}
