@@ -41,13 +41,11 @@ export default defineComponent({
   },
   setup () {
     const isCreateChannelModalVisible = ref(false)
-    const ruter = useRouter()
+    const router = useRouter()
 
-    // TODO: request server and get hash
     const joinChannel = (channelName: string) => {
       isCreateChannelModalVisible.value = false
-      ruter.push({ name: 'Communication', params: { communicationHash: channelName } })
-      // useRouter().push({ name: 'Communication', params: { communicationHash: channelName } })
+      router.push({ name: 'Communication', params: { communicationHash: channelName } })
     }
 
     return {
