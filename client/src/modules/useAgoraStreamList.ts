@@ -1,5 +1,5 @@
-import { Stream } from 'agora-rtc-sdk'
-import { ref, computed } from 'vue'
+import { Client, Stream } from 'agora-rtc-sdk'
+import { Ref, ref, computed } from 'vue'
 
 export const useAgoraStreamList = () => {
   const streamList = ref<Stream[]>([])
@@ -20,10 +20,26 @@ export const useAgoraStreamList = () => {
     }
   }
 
+  const subscribeStreamEvents = (client: Ref<Client>) => {
+    client.value.on('stream-added', ({ stream }) => {
+      client.value.subscribe(stream)
+    })
+    client.value.on('stream-removed', ({ stream }) => {
+      removeStream(stream.getId())
+    })
+    client.value.on('stream-subscribed', ({ stream }) => {
+      addStream(stream, false)
+    })
+    client.value.on('peer-leave', ({ uid }) => {
+      removeStream(uid)
+    })
+  }
+
   return {
     streamList,
 
     addStream,
-    removeStream
+    removeStream,
+    subscribeStreamEvents
   }
 }
