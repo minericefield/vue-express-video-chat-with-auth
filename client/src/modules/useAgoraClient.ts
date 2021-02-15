@@ -18,7 +18,6 @@ export const useAgoraClient = (myId: Ref<string>) => {
       // resolve(myId)
       resolve()
     }, (error) => {
-      console.log({error})
       reject(error)
     })
   })
