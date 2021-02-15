@@ -6,8 +6,15 @@ import router from '../router/'
 
 import AuthApi from '../api/Auth'
 
+export type Me = {
+  isAuthenticated: boolean;
+  _id: string;
+  name: string;
+  email: string;
+}
+
 export const useAuthMe = () => {
-  const me = reactive({
+  const me = reactive<Me>({
     isAuthenticated: false,
     _id: '',
     name: '',
