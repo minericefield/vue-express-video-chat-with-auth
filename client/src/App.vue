@@ -22,6 +22,7 @@ import { useLoader, UseLoaderKey } from './modules/useLoader'
 import { useToasting, UseToastingKey } from './modules/useToasting'
 import { useAuthMe, UseAuthMeKey } from './modules/useAuthMe'
 import { useVideoSettings, UseVideoSettingsKey } from './modules/useVideoSettings'
+import { useChannels, UseChannelsKey } from './modules/useChannels'
 import Loader from './components/Loader.vue'
 import Toasting from './components/Toasting.vue'
 
@@ -39,6 +40,8 @@ export default defineComponent({
     provide(UseAuthMeKey, authMe)
     const videoSettings = useVideoSettings()
     provide(UseVideoSettingsKey, videoSettings)
+    const channels = useChannels({ _id: authMe._id, name: authMe.name }, { isVideoOn: videoSettings.isVideoOn, isAudioOn: videoSettings.isAudioOn })
+    provide(UseChannelsKey, channels)
 
     authMe.fetchMyInfo()
     videoSettings.restoreSettings()
@@ -46,7 +49,9 @@ export default defineComponent({
     return {
       loader,
       toasting,
-      authMe
+      authMe,
+      videoSettings,
+      channels
     }
   }
 })
