@@ -1,7 +1,7 @@
 <template>
   <layout-default>
-    <div class="top position-relative w-100 h-100">
-      <nav class="navbar navbar-expand-lg">
+    <div class="top d-flex flex-column position-relative w-100 h-100">
+      <nav class="top-header navbar navbar-expand-lg">
         <button
           @click="isCreateChannelModalVisible = true"
           class="btn btn-info d-flex"
@@ -15,6 +15,14 @@
         </button>
       </nav>
 
+      <div class="top-body d-flex flex-wrap flex-grow-1 justify-content-between px-3 pb-2w-100 overflow-auto">
+        <channel-preview
+          v-for="channel in channels"
+          :key="channel.name"
+          :channel="channel"
+        />
+      </div>
+
       <teleport to="#modal-overlay">
         <create-channel-modal
           v-if="isCreateChannelModalVisible"
@@ -27,20 +35,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { UseChannelsKey } from '../modules/useChannels'
 
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import CreateChannelModal from '../components/CreateChannelModal.vue'
+import ChannelPreview from '../components/ChannelPreview.vue'
 
 export default defineComponent({
   name: 'Top',
   components: {
     LayoutDefault,
-    CreateChannelModal
+    CreateChannelModal,
+    ChannelPreview
   },
   setup () {
+    const { channels } = inject(UseChannelsKey)
     const isCreateChannelModalVisible = ref(false)
+
     const router = useRouter()
 
     const joinChannel = (channelName: string) => {
@@ -49,6 +63,7 @@ export default defineComponent({
     }
 
     return {
+      channels,
       isCreateChannelModalVisible,
 
       joinChannel
@@ -56,3 +71,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.top {
+  &-header {
+    min-height: 54px;
+  }
+}
+</style>
