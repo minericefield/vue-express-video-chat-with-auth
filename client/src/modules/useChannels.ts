@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import { ToRefs, InjectionKey, ref, computed, unref } from 'vue'
+import { ToRefs, InjectionKey, ref, computed } from 'vue'
 
 import { Me } from './useAuthMe'
 import { State as VideoSettingsState } from './useVideoSettings'
