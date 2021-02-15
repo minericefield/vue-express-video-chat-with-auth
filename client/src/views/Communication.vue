@@ -3,6 +3,7 @@
     <div class="communication d-flex flex-column h-100">
       <communication-body
         :stream-list="streamList"
+        :channel-members="joiningChannel(channelName) ? joiningChannel(channelName).members : []"
         class="flex-grow-1 w-100"
       />
 
@@ -34,6 +35,7 @@ import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
 import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
+import { UseChannelsKey } from '../modules/useChannels'
 import { useAgoraClient } from '../modules/useAgoraClient'
 import { useAgoraStream } from '../modules/useAgoraStream'
 import { useAgoraStreamList } from '../modules/useAgoraStreamList'
@@ -54,28 +56,15 @@ export default defineComponent({
     const toasting = inject(UseToastingKey, toastingDefault)
     const { isAudioOn, isVideoOn, updateSettings: updateVideoSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const { _id: myId } = inject(UseAuthMeKey, authMeDefault)
+    const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey)
+
     const router = useRouter()
     const channelName = useRoute().params.communicationHash as string // TODO: use server response
     const isMediaPermissionAlertModalVisible = ref(false)
 
     const { client, init: initClient, exit } = useAgoraClient(myId)
     const { myStream, subscribeAccessHandledEvent, init: initStream, reCreateStream } = useAgoraStream(myId, { isAudioOn, isVideoOn })
-    const { streamList, addStream, removeStream } = useAgoraStreamList()
-
-    const subscribeStreamEvents = () => {
-      client.value.on('stream-added', ({ stream }) => {
-        client.value.subscribe(stream)
-      })
-      client.value.on('stream-removed', ({ stream }) => {
-        removeStream(stream.getId())
-      })
-      client.value.on('stream-subscribed', ({ stream }) => {
-        addStream(stream, false)
-      })
-      client.value.on('peer-leave', ({ uid }) => {
-        removeStream(uid)
-      })
-    }
+    const { streamList, addStream, removeStream, subscribeStreamEvents } = useAgoraStreamList()
 
     const initMe = async () => {
       await initStream()
@@ -94,6 +83,8 @@ export default defineComponent({
       }
 
       if (type === 'audio') {
+        if (isAudioOn.value && !isVideoOn.value) return toasting.displayToasting({ message: 'Either must be enabled.', isError: true })
+
         updateVideoSettings({ isAudioOn: !isAudioOn.value })
         if (myStream.value.hasAudio()) {
           isAudioOn.value ? myStream.value.unmuteAudio() : myStream.value.muteAudio()
@@ -103,6 +94,8 @@ export default defineComponent({
       }
 
       if (type === 'video') {
+        if (isVideoOn.value && !isAudioOn.value) return toasting.displayToasting({ message: 'Either must be enabled.', isError: true })
+
         updateVideoSettings({ isVideoOn: !isVideoOn.value })
         if (myStream.value.hasVideo()) {
           isVideoOn.value ? myStream.value.unmuteVideo() : myStream.value.muteVideo()
@@ -110,14 +103,19 @@ export default defineComponent({
           await startOver()
         }
       }
+
+      onVideoSettingsUpdate(channelName)
     }
 
-    onMounted(async () => { // TODO: Error handling
-      subscribeStreamEvents()
+    const execOnExit = () => { onExit(channelName) }
+    onMounted(async () => {
+      window.addEventListener('beforeunload', execOnExit)
+
+      subscribeStreamEvents(client)
       await initClient(channelName)
 
       subscribeAccessHandledEvent(() => {
-        toasting.displayToasting({ message: 'Thank you for permitting your device' })
+        onJoin(channelName)
       }, () => {
         isMediaPermissionAlertModalVisible.value = true
       })
@@ -128,9 +126,11 @@ export default defineComponent({
       loader.displayLoader(true)
       try {
         await exit(myStream.value)
-      } catch (error) {
+      } catch (_) {
         // 
       } finally {
+        onExit(channelName)
+        window.removeEventListener('beforeunload', execOnExit)
         loader.displayLoader(false)
         next()
       }
@@ -142,6 +142,8 @@ export default defineComponent({
       isAudioOn,
       isVideoOn,
       streamList,
+      joiningChannel,
+      channelName,
 
       onAttendeeControllerClick
     }

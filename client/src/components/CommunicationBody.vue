@@ -6,6 +6,7 @@
     <agora-stream
       v-for="stream in streamList"
       :stream="stream"
+      :video-settings="getVideoSettingsFromStreamId(stream.getId())"
       :key="stream.getId()"
       :style="{ width: streamSize.width + 'px', height: streamSize.height + 'px' }"
     />
@@ -27,6 +28,7 @@ import {
   watch
 } from 'vue'
 
+import { ChannelMember } from '../types/ChannelMember'
 import AgoraStream from './AgoraStream.vue'
 
 export default defineComponent({
@@ -37,11 +39,24 @@ export default defineComponent({
     streamList: {
       type: Array as PropType<Stream[]>,
       required: true
+    },
+    channelMembers: {
+      type: Array as PropType<ChannelMember[]>,
+      required: true
     }
   },
   setup (props) {
-    const { streamList } = toRefs(props)
+    const { streamList, channelMembers } = toRefs(props)
     const streamListLength = computed(() => streamList.value.length)
+    const getVideoSettingsFromStreamId = computed(() => {
+      return (streamId: string) => {
+        const targetChannelMember = channelMembers.value.find((channelMember) => channelMember._id === streamId)
+        return {
+          isAudioOn: targetChannelMember?.isAudioOn,
+          isVideoOn: targetChannelMember?.isVideoOn
+        }
+      }
+    })
 
     const doc = ref<HTMLElement | null>(null)
     const streamSize = reactive({
@@ -74,7 +89,9 @@ export default defineComponent({
 
     return {
       doc,
-      streamSize
+      streamSize,
+
+      getVideoSettingsFromStreamId
     }
   }
 })
