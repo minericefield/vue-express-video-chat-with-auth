@@ -70,10 +70,11 @@ export default defineComponent({
       const { clientWidth, clientHeight } = doc.value as HTMLElement
       if (clientWidth > clientHeight) {
         streamSize.width = clientWidth / (streamsSqrt + .5)
+        streamSize.height = streamSize.width * clientHeight / clientWidth
       } else {
-        streamSize.width = clientWidth * .8
+        streamSize.width = clientWidth / (streamsSqrt + .5)
+        streamSize.height = clientHeight / (streamsSqrt + .5)
       }
-      streamSize.height = streamSize.width * clientHeight / clientWidth
     }
 
     watch(streamListLength, initScale) // could be handled parents on stream add or remove event
