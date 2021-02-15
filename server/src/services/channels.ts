@@ -39,7 +39,7 @@ export const init = (server: SeverT) => {
 
       targetChannel.addMember(channelMember)
       
-      // io.to(channelName).emit('channel_updated', channels)
+      // io.to(channelName).emit('channel_updated', channels) // TODO: make private on update_video_settings
       io.emit('on_channels_updated', channels)
     })
 
@@ -65,5 +65,7 @@ export const init = (server: SeverT) => {
         io.emit('on_channels_updated', channels)
       }
     })
+
+    io.emit('on_init', channels)
   })
 }

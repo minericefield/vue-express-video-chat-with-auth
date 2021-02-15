@@ -5,7 +5,7 @@ import { Me } from './useAuthMe'
 import { State as VideoSettingsState } from './useVideoSettings'
 import { ChannelMember } from '../types/ChannelMember'
 
-type Channel = {
+export type Channel = {
   name: string;
   members: ChannelMember[];
 }
@@ -41,6 +41,10 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
   const onExit = (channelName: string) => {
     socket.emit('exit_channel', { channelName, channelMember: meAsMember.value })
   }
+
+  socket.on('on_init', (_channels: Channel[]) => {
+    channels.value = _channels
+  })
 
   socket.on('on_channels_updated', (_channels: Channel[]) => {
     channels.value = _channels
