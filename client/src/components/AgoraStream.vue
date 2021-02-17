@@ -3,9 +3,12 @@
     :id="'stream_' + stream.getId()"
     class="agora-stream position-relative border rounded bg-white overflow-hidden"
   >
+    <h5 class="agora-stream-name position-absolute p-3 text-info">
+      {{ member?.name }}
+    </h5>
     <div class="agora-stream-footer d-flex align-items-center justify-content-end position-absolute w-100 p-1">
       <i
-        v-show="videoSettings.isAudioOn === false"
+        v-show="member?.isAudioOn === false"
         key="audio"
         class="agora-stream-footer-icon material-icons position-relative text-danger"
       >
@@ -13,7 +16,7 @@
       </i>
       <div class="p-1" />
       <i
-        v-show="videoSettings.isVideoOn === false"
+        v-show="member?.isVideoOn === false"
         key="video"
         class="agora-stream-footer-icon material-icons position-relative text-danger"
       >
@@ -27,7 +30,7 @@
 import { Stream } from 'agora-rtc-sdk'
 import { PropType, defineComponent, toRefs, onMounted, nextTick} from 'vue'
 
-import { State as VideoSettingsState } from '../modules/useVideoSettings'
+import { ChannelMember } from '../types/ChannelMember'
 
 export default defineComponent({
   props: {
@@ -35,8 +38,8 @@ export default defineComponent({
       type: Object as PropType<Stream>,
       required: true
     },
-    videoSettings: {
-      type: Object as PropType<VideoSettingsState>,
+    member: {
+      type: Object as PropType<ChannelMember>,
       required: true
     }
   },
@@ -61,19 +64,24 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.agora-stream-footer {
-  bottom: 0;
-  z-index: 1;
-  &-icon {
-    &::after {
-      position: absolute;
-      top: 50%;
-      left: -10%;
-      content: "";
-      height: 2px;
-      width: 120%;
-      background-color: #DC3545;
-      transform: rotate(145deg);
+.agora-stream {
+  &-name {
+    z-index: 1;
+  }
+  &-footer {
+    bottom: 0;
+    z-index: 1;
+    &-icon {
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: -10%;
+        content: "";
+        height: 2px;
+        width: 120%;
+        background-color: #DC3545;
+        transform: rotate(145deg);
+      }
     }
   }
 }

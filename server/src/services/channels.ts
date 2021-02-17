@@ -1,69 +1,41 @@
 import { Server as SeverT } from 'http'
 import { Server, Socket } from 'socket.io'
 
-type ChannelMember = {
-  _id: string;
-  name: string;
-  isAudioOn: boolean;
-  isVideoOn: boolean;
-}
+import { ChannelControlFromClient, Channels } from './definitions/channels'
 
-class Channel {
-  public name: string
-  public members: ChannelMember[] = []
-
-  constructor (name: string) {
-    this.name = name
-  }
-
-  public addMember (member: ChannelMember) {
-    this.members.push(member)
-  }
-  public removeMember (member: ChannelMember) {
-    this.members = this.members.filter((_member) => _member._id !== member._id)
-  }
-}
-
-let channels: Channel[] = []
+const channels = new Channels()
 
 export const init = (server: SeverT) => {
   const io = new Server(server)
+  const onChannelsUpdated = () => {
+    io.emit('on_channels_updated', channels.channelsForResponse)
+  }
+
   io.on('connection', (socket: Socket) => {
-    socket.on('join_channel', ({ channelName, channelMember }: { channelName: string; channelMember: ChannelMember }) => {
-      let targetChannel = channels.find((_channel) => _channel.name === channelName)
-      if (!targetChannel) {
-        targetChannel = new Channel(channelName)
-        channels.push(targetChannel)
-      }
-      // socket.join(channelName)
-
-      targetChannel.addMember(channelMember)
-      
+    socket.on('join_channel', ({ channelName, channelMember }: ChannelControlFromClient) => {
+      channels.joinChannel({ channelName, channelMember: { socketId: socket.id, ...channelMember } }, onChannelsUpdated)
+      // socket.join(channelName) // Maybe TODO: make private for update_video_settings
       // io.to(channelName).emit('channel_updated', channels)
-      io.emit('on_channels_updated', channels)
     })
 
-    socket.on('exit_channel', ({ channelName, channelMember }: { channelName: string; channelMember: ChannelMember }) => {
-      const targetChannel = channels.find((channel) => channel.name === channelName)
-      if (targetChannel) {
-        targetChannel.removeMember(channelMember)
-        if (!targetChannel.members.length) {
-          channels = channels.filter((_channel) => _channel.name !== targetChannel.name)
-        }
-
-        io.emit('on_channels_updated', channels)
-      }
+    socket.on('exit_channel', ({ channelName, channelMember }: ChannelControlFromClient) => {
+      channels.exitChannel({ channelName, channelMember: { socketId: socket.id, ...channelMember } }, onChannelsUpdated)
     })
 
-    socket.on('update_video_settings', ({ channelName, channelMember }: { channelName: string; channelMember: ChannelMember }) => {
-      const targetChannel = channels.find((channel) => channel.name === channelName)
-      if (targetChannel) {
-        const targetMember = targetChannel.members.find((member) => member._id === channelMember._id)
-        targetMember.isAudioOn = channelMember.isAudioOn
-        targetMember.isVideoOn = channelMember.isVideoOn
+    socket.on('update_video_settings', ({ channelName, channelMember }: ChannelControlFromClient) => {
+      channels.updateVideoSettings({ channelName, channelMember: { socketId: socket.id, ...channelMember } }, onChannelsUpdated)
+    })
 
-        io.emit('on_channels_updated', channels)
-      }
+    socket.on('init', () => {
+      // just in case remove dusts on each client's init
+      const arrivedConnectionIds = [...io.sockets.sockets.keys()]
+      channels.cleanup(arrivedConnectionIds, onChannelsUpdated)
+    })
+
+    // NOTE: maybe safari disconnect delays
+    socket.on('disconnect', () => {
+      const arrivedConnectionIds = [...io.sockets.sockets.keys()].filter(socketId => socketId !== socket.id)
+      channels.cleanup(arrivedConnectionIds, onChannelsUpdated)
     })
   })
 }

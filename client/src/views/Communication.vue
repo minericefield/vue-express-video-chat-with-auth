@@ -24,6 +24,13 @@
         />
       </div>
     </div>
+
+    <teleport to="#modal-overlay">
+      <media-permission-alert-modal
+        v-if="isMediaPermissionAlertModalVisible"
+        @on-submit="isMediaPermissionAlertModalVisible = false, initMe()"
+      />
+    </teleport>
   </layout-default>
 </template>
 
@@ -35,7 +42,7 @@ import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
 import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
-import { UseChannelsKey } from '../modules/useChannels'
+import { UseChannelsKey, channelsDefault } from '../modules/useChannels'
 import { useAgoraClient } from '../modules/useAgoraClient'
 import { useAgoraStream } from '../modules/useAgoraStream'
 import { useAgoraStreamList } from '../modules/useAgoraStreamList'
@@ -43,43 +50,47 @@ import { useAgoraStreamList } from '../modules/useAgoraStreamList'
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import CircleIconButton from '../components/CircleIconButton.vue'
 import CommunicationBody from '../components/CommunicationBody.vue'
+import MediaPermissionAlertModal from '../components/MediaPermissionAlertModal.vue'
 
 export default defineComponent({
   name: 'Communication',
   components: {
     LayoutDefault,
     CircleIconButton,
-    CommunicationBody
+    CommunicationBody,
+    MediaPermissionAlertModal
   },
   setup () {
     const loader = inject(UseLoaderKey, loaderDefault)
     const toasting = inject(UseToastingKey, toastingDefault)
     const { isAudioOn, isVideoOn, updateSettings: updateVideoSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const { _id: myId } = inject(UseAuthMeKey, authMeDefault)
-    const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey)
+    const { getChannelFromItsName, joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey, channelsDefault)
 
     const router = useRouter()
-    const channelName = useRoute().params.communicationHash as string // TODO: use server response
-    const isMediaPermissionAlertModalVisible = ref(false)
+    const channelName = useRoute().params.channelName as string
 
     const { client, init: initClient, exit } = useAgoraClient(myId)
     const { myStream, subscribeAccessHandledEvent, init: initStream, reCreateStream } = useAgoraStream(myId, { isAudioOn, isVideoOn })
     const { streamList, addStream, removeStream, subscribeStreamEvents } = useAgoraStreamList()
 
+    const isMediaPermissionAlertModalVisible = ref(false)
+    const joiningSucceed = ref(false)
+
     const initMe = async () => {
+      loader.displayLoader(true)
       await initStream()
       addStream(myStream.value, true)
       client.value.publish(myStream.value)
+      loader.displayLoader(false)
     }
 
     const onAttendeeControllerClick = async (type: 'audio' | 'video') => {
       const startOver = async () => {
-        loader.displayLoader(true)
         client.value.unpublish(myStream.value)
         removeStream(myStream.value.getId())
         reCreateStream()
         await initMe()
-        loader.displayLoader(false)
       }
 
       if (type === 'audio') {
@@ -109,31 +120,46 @@ export default defineComponent({
 
     const execOnExit = () => { onExit(channelName) }
     onMounted(async () => {
+      loader.displayLoader(true)
       window.addEventListener('beforeunload', execOnExit)
+
+      if (getChannelFromItsName(channelName)?.members.find((member) => member._id === myId.value)) {
+        toasting.displayToasting({ message: 'You are already joining this channel.', isError: true })
+        return router.push({ name: 'Top' })
+      }
 
       subscribeStreamEvents(client)
       await initClient(channelName)
 
       subscribeAccessHandledEvent(() => {
         onJoin(channelName)
+        joiningSucceed.value = true
+        toasting.displayToasting({ message: `Joined channel "${channelName}" !` })
       }, () => {
         isMediaPermissionAlertModalVisible.value = true
       })
       await initMe()
+      loader.displayLoader(false)
     })
 
     onBeforeRouteLeave(async (_, __, next) => {
+      window.removeEventListener('beforeunload', execOnExit)
+
       loader.displayLoader(true)
-      try {
-        await exit(myStream.value)
-      } catch (_) {
-        // 
-      } finally {
-        onExit(channelName)
-        window.removeEventListener('beforeunload', execOnExit)
-        loader.displayLoader(false)
-        next()
+      if (joiningSucceed.value) {
+        loader.displayLoader(true)
+        try {
+          await exit(myStream.value)
+        } catch (_) {
+          // 
+        } finally {
+          execOnExit()
+          loader.displayLoader(false)
+        }
       }
+      loader.displayLoader(false)
+
+      next()
     })
 
     return {
@@ -144,7 +170,9 @@ export default defineComponent({
       streamList,
       joiningChannel,
       channelName,
+      isMediaPermissionAlertModalVisible,
 
+      initMe,
       onAttendeeControllerClick
     }
   }

@@ -6,7 +6,7 @@
     <agora-stream
       v-for="stream in streamList"
       :stream="stream"
-      :video-settings="getVideoSettingsFromStreamId(stream.getId())"
+      :member="getMemberFromStreamId(stream.getId())"
       :key="stream.getId()"
       :style="{ width: streamSize.width + 'px', height: streamSize.height + 'px' }"
     />
@@ -48,13 +48,9 @@ export default defineComponent({
   setup (props) {
     const { streamList, channelMembers } = toRefs(props)
     const streamListLength = computed(() => streamList.value.length)
-    const getVideoSettingsFromStreamId = computed(() => {
+    const getMemberFromStreamId = computed(() => {
       return (streamId: string) => {
-        const targetChannelMember = channelMembers.value.find((channelMember) => channelMember._id === streamId)
-        return {
-          isAudioOn: targetChannelMember?.isAudioOn,
-          isVideoOn: targetChannelMember?.isVideoOn
-        }
+        return channelMembers.value.find((channelMember) => channelMember._id === streamId)
       }
     })
 
@@ -70,10 +66,11 @@ export default defineComponent({
       const { clientWidth, clientHeight } = doc.value as HTMLElement
       if (clientWidth > clientHeight) {
         streamSize.width = clientWidth / (streamsSqrt + .5)
+        streamSize.height = streamSize.width * clientHeight / clientWidth
       } else {
-        streamSize.width = clientWidth * .8
+        streamSize.width = clientWidth / (streamsSqrt + .5)
+        streamSize.height = clientHeight / (streamsSqrt + .5)
       }
-      streamSize.height = streamSize.width * clientHeight / clientWidth
     }
 
     watch(streamListLength, initScale) // could be handled parents on stream add or remove event
@@ -91,7 +88,7 @@ export default defineComponent({
       doc,
       streamSize,
 
-      getVideoSettingsFromStreamId
+      getMemberFromStreamId
     }
   }
 })

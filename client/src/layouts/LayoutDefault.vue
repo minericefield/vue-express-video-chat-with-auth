@@ -63,8 +63,6 @@ export default defineComponent({
       })
     }
 
-    // onMounted(fetchMyInfo)
-
     return {
       isAuthenticated,
       routeName: route.name,

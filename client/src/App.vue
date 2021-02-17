@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative w-100 h-100">
-    <router-view />
+    <router-view v-if="channels.initialized.value" />
     <teleport to="#loader-overlay">
       <loader v-if="loader.isVisible.value" />
     </teleport>

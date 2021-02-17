@@ -5,7 +5,7 @@ import { Me } from './useAuthMe'
 import { State as VideoSettingsState } from './useVideoSettings'
 import { ChannelMember } from '../types/ChannelMember'
 
-type Channel = {
+export type Channel = {
   name: string;
   members: ChannelMember[];
 }
@@ -24,10 +24,14 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
       name: me.name.value
     }
   })
+  const initialized = ref(false)
+
+  const getChannelFromItsName = (name: string) => {
+    return channels.value.find((channel) => channel.name === name)
+  }
+
   const joiningChannel = computed(() => {
-    return (name: string) => {
-      return channels.value.find((channel) => channel.name === name)
-    }
+    return getChannelFromItsName
   })
 
   const onJoin = (channelName: string) => {
@@ -44,11 +48,16 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
 
   socket.on('on_channels_updated', (_channels: Channel[]) => {
     channels.value = _channels
+    initialized.value = true
   })
+
+  socket.emit('init')
 
   return {
     channels,
+    getChannelFromItsName,
     joiningChannel,
+    initialized,
 
     onJoin,
     onVideoSettingsUpdate,
@@ -59,3 +68,5 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
 export type Channels = ReturnType<typeof useChannels>
 
 export const UseChannelsKey: InjectionKey<Channels> = Symbol('UseAuthMe')
+
+export const channelsDefault = useChannels({ _id: ref(''), name: ref('') }, { isAudioOn: ref(false), isVideoOn: ref(false) })

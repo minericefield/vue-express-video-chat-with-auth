@@ -18,3 +18,9 @@
 .justify-content-evenly {
   justify-content: space-evenly;
 }
+
+.text-ellipse {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

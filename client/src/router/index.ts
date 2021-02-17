@@ -14,17 +14,15 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Top',
     component: Top,
     meta: {
-      needsAuth: true,
-      needsTransitIn: 'default'
+      needsAuth: true
     }
   },
   {
-    path: '/communication/:communicationHash',
+    path: '/communication/:channelName',
     name: 'Communication',
     component: Communication,
     meta: {
-      needsAuth: true,
-      needsTransitIn: 'default'
+      needsAuth: true
     }
   },
   {
@@ -32,8 +30,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AuthLogin',
     component: AuthLogin,
     meta: {
-      needsAuth: false,
-      needsTransitIn: 'nothing'
+      needsAuth: false
     }
   },
   {
@@ -41,8 +38,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AuthRegister',
     component: AuthRegister,
     meta: {
-      needsAuth: false,
-      needsTransitIn: 'nothing'
+      needsAuth: false
     }
   },
   {
@@ -50,8 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AuthVerify',
     component: AuthVerify,
     meta: {
-      needsAuth: false,
-      needsTransitIn: 'nothing'
+      needsAuth: false
     }
   },
   {
@@ -59,8 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'AuthMe',
     component: AuthMe,
     meta: {
-      needsAuth: true,
-      needsTransitIn: 'default'
+      needsAuth: true
     }
   }
 ]

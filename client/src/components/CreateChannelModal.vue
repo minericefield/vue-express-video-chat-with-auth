@@ -107,6 +107,9 @@ export default defineComponent({
       if (channelName.text.trim() === '') {
         errorDoesntExist = false
         channelName.errorMessage = 'Please provide channel name.'
+      } else if (!/^[0-9a-zA-Z_]+$/.test(channelName.text)) {
+        errorDoesntExist = false
+        channelName.errorMessage = 'Channel name must be English.'
       }
       if (!isAudioOn.value && !isVideoOn.value) {
         errorDoesntExist = false
