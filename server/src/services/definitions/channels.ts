@@ -35,7 +35,7 @@ class Channel {
   }
 
   public removeMember (member: ChannelMember) {
-    this.members = this.members.filter((_member) => _member._id !== member._id)
+    this.members = this.members.filter((_member) => _member._id !== member._id && _member.socketId !== member.socketId)
   }
 }
 
@@ -73,8 +73,10 @@ export class Channels {
       targetChannel = new Channel(channelName)
       this.channels.push(targetChannel)
     }
+    if (!targetChannel.members.find((member) => member._id === channelMember._id)) {
+      targetChannel.addMember(channelMember)
+    }
 
-    targetChannel.addMember(channelMember)
     callBack()
   }
 
@@ -93,7 +95,7 @@ export class Channels {
   public updateVideoSettings ({ channelName, channelMember }: ChannelControl, callBack: () => void) {
     const targetChannel = this.getChannelFromItsName(channelName)
     if (targetChannel) {
-      const targetMember = targetChannel.members.find((member) => member._id === channelMember._id)
+      const targetMember = targetChannel.members.find((member) => member._id === channelMember._id && member.socketId === channelMember.socketId)
       targetMember.isAudioOn = channelMember.isAudioOn
       targetMember.isVideoOn = channelMember.isVideoOn
 
