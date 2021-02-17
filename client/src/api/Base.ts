@@ -85,33 +85,3 @@ export default class BaseApi {
     return response
   }
 }
-
-// protected async getCancelable ({ url, data, key }: { url: string; data?: Record<string, any>; key: string }) {
-//   if (this.cancelTokenSources[key]) {
-//     this.cancelTokenSources[key].cancel()
-//   }
-//   this.cancelTokenSources[key] = axios.CancelToken.source()
-
-//   let response!: Response
-
-//   try {
-//     response = await this.axios.get(url, { params: data })
-//   } catch (error) { // type :AxiosError
-//     if (axios.isCancel(error)) {
-//       response.status = 999
-//       response.canceled = true
-//     } else {
-//       response = error.response
-//     }
-//   }
-
-//   if (response.status < 300) {
-//     response.succeed = true
-//   } else {
-//     response.succeed = false
-//   }
-
-//   delete this.cancelTokenSources[key]
-
-//   return response
-// }

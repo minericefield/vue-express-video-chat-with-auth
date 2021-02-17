@@ -10,12 +10,9 @@ const config: ClientConfig = {
 
 export const useAgoraClient = (myId: Ref<string>) => {
   const client = ref(createClient(config))
-  // const myId ...
 
   const join = (channelName: string) => new Promise<void>((resolve, reject) => {
     client.value.join(appId, channelName, myId.value, undefined, () => {
-      // myId.value = generatedMyId
-      // resolve(myId)
       resolve()
     }, (error) => {
       reject(error)

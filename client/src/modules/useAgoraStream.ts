@@ -3,7 +3,6 @@ import { Ref, ToRefs, ref, computed } from 'vue'
 
 import { State as VideoSettingsState } from './useVideoSettings'
 
-// TODO: handle with attendance
 export const useAgoraStream = (myId: Ref<string>, { isAudioOn, isVideoOn }: ToRefs<VideoSettingsState>) => {
   const streamSpec = computed<StreamSpec>(() => {
     return {
