@@ -1,19 +1,29 @@
-type ChannelMember = {
+type ChannelMemberFromClient = {
   _id: string;
   name: string;
   isAudioOn: boolean;
   isVideoOn: boolean;
+}
+
+type SocketId = {
   socketId: string;
 }
 
-export type ChannelControl = {
+type ChannelMember = ChannelMemberFromClient & SocketId
+
+export type ChannelControlFromClient = {
+  channelName: string;
+  channelMember: ChannelMember
+}
+
+type ChannelControl = {
   channelName: string;
   channelMember: ChannelMember
 }
 
 class Channel {
   public name: string
-  public members: ChannelMember[] = []
+  public members:  ChannelMember[] = []
 
   constructor (name: string) {
     this.name = name
@@ -31,7 +41,9 @@ class Channel {
   }
 
   public addMember (member: ChannelMember) {
-    this.members.push(member)
+    if (!this.members.find((_member) => _member._id === member._id)) {
+      this.members.push(member)
+    }
   }
 
   public removeMember (member: ChannelMember) {
@@ -73,9 +85,7 @@ export class Channels {
       targetChannel = new Channel(channelName)
       this.channels.push(targetChannel)
     }
-    if (!targetChannel.members.find((member) => member._id === channelMember._id)) {
-      targetChannel.addMember(channelMember)
-    }
+    targetChannel.addMember(channelMember)
 
     callBack()
   }

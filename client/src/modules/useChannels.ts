@@ -24,10 +24,13 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
       name: me.name.value
     }
   })
+
+  const getChannelFromItsName = (name: string) => {
+    return channels.value.find((channel) => channel.name === name)
+  }
+
   const joiningChannel = computed(() => {
-    return (name: string) => {
-      return channels.value.find((channel) => channel.name === name)
-    }
+    return getChannelFromItsName
   })
 
   const onJoin = (channelName: string) => {
@@ -42,16 +45,15 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
     socket.emit('exit_channel', { channelName, channelMember: meAsMember.value })
   }
 
-  socket.on('on_init', (_channels: Channel[]) => {
-    channels.value = _channels
-  })
-
   socket.on('on_channels_updated', (_channels: Channel[]) => {
     channels.value = _channels
   })
 
+  socket.emit('init')
+
   return {
     channels,
+    getChannelFromItsName,
     joiningChannel,
 
     onJoin,
