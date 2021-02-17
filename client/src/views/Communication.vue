@@ -24,6 +24,13 @@
         />
       </div>
     </div>
+
+    <teleport to="#modal-overlay">
+      <media-permission-alert-modal
+        v-if="isMediaPermissionAlertModalVisible"
+        @on-submit="isMediaPermissionAlertModalVisible = false, initMe()"
+      />
+    </teleport>
   </layout-default>
 </template>
 
@@ -43,13 +50,15 @@ import { useAgoraStreamList } from '../modules/useAgoraStreamList'
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import CircleIconButton from '../components/CircleIconButton.vue'
 import CommunicationBody from '../components/CommunicationBody.vue'
+import MediaPermissionAlertModal from '../components/MediaPermissionAlertModal.vue'
 
 export default defineComponent({
   name: 'Communication',
   components: {
     LayoutDefault,
     CircleIconButton,
-    CommunicationBody
+    CommunicationBody,
+    MediaPermissionAlertModal
   },
   setup () {
     const loader = inject(UseLoaderKey, loaderDefault)
@@ -69,19 +78,19 @@ export default defineComponent({
     const joiningSucceed = ref(false)
 
     const initMe = async () => {
+      loader.displayLoader(true)
       await initStream()
       addStream(myStream.value, true)
       client.value.publish(myStream.value)
+      loader.displayLoader(false)
     }
 
     const onAttendeeControllerClick = async (type: 'audio' | 'video') => {
       const startOver = async () => {
-        loader.displayLoader(true)
         client.value.unpublish(myStream.value)
         removeStream(myStream.value.getId())
         reCreateStream()
         await initMe()
-        loader.displayLoader(false)
       }
 
       if (type === 'audio') {
@@ -111,6 +120,7 @@ export default defineComponent({
 
     const execOnExit = () => { onExit(channelName) }
     onMounted(async () => {
+      loader.displayLoader(true)
       window.addEventListener('beforeunload', execOnExit)
 
       if (getChannelFromItsName(channelName)?.members.find((member) => member._id === myId.value)) {
@@ -129,6 +139,7 @@ export default defineComponent({
         isMediaPermissionAlertModalVisible.value = true
       })
       await initMe()
+      loader.displayLoader(false)
     })
 
     onBeforeRouteLeave(async (_, __, next) => {
@@ -157,7 +168,9 @@ export default defineComponent({
       streamList,
       joiningChannel,
       channelName,
+      isMediaPermissionAlertModalVisible,
 
+      initMe,
       onAttendeeControllerClick
     }
   }
