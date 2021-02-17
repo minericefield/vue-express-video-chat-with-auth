@@ -36,9 +36,9 @@
                 <small class="text-small mr-2 mb-0">
                   ChannelName: 
                 </small>
-                <h5 class="mb-0">
+                <h4 class="mb-0">
                   {{ channel.name }}
-                </h5>
+                </h4>
               </div>
               <h5>
                 Members
@@ -93,18 +93,8 @@ export default defineComponent({
   setup () {
     const isChannelDetailOverlayVisible = ref(false)
 
-    const onMouseEnter = () => {
-      isChannelDetailOverlayVisible.value = true
-    }
-
-    const onMouseLeave = () => {
-      isChannelDetailOverlayVisible.value = false
-    }
-
     return {
-      isChannelDetailOverlayVisible,
-      onMouseEnter,
-      onMouseLeave
+      isChannelDetailOverlayVisible
     }
   }
 })
@@ -120,12 +110,10 @@ export default defineComponent({
   }
 }
 
-.modal-content-fade-enter-from,
-.modal-content-fade-enter-leave-to {
+.modal-content-fade-enter-from {
   transform: scale(0);
 }
-.modal-content-fade-enter-active,
-.modal-content-fade-enter-leave-active {
+.modal-content-fade-enter-active {
   transition: transform ease .4s;
 }
 </style>
