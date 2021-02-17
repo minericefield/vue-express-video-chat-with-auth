@@ -38,7 +38,7 @@
 import { defineComponent, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { UseChannelsKey } from '../modules/useChannels'
+import { UseChannelsKey, channelsDefault } from '../modules/useChannels'
 
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import CreateChannelModal from '../components/CreateChannelModal.vue'
@@ -52,7 +52,7 @@ export default defineComponent({
     ChannelPreview
   },
   setup () {
-    const { channels } = inject(UseChannelsKey)
+    const { channels } = inject(UseChannelsKey, channelsDefault)
     const isCreateChannelModalVisible = ref(false)
 
     const router = useRouter()

@@ -35,7 +35,7 @@ import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
 import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
 import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
-import { UseChannelsKey } from '../modules/useChannels'
+import { UseChannelsKey, channelsDefault } from '../modules/useChannels'
 import { useAgoraClient } from '../modules/useAgoraClient'
 import { useAgoraStream } from '../modules/useAgoraStream'
 import { useAgoraStreamList } from '../modules/useAgoraStreamList'
@@ -56,7 +56,7 @@ export default defineComponent({
     const toasting = inject(UseToastingKey, toastingDefault)
     const { isAudioOn, isVideoOn, updateSettings: updateVideoSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const { _id: myId } = inject(UseAuthMeKey, authMeDefault)
-    const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey)
+    const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey, channelsDefault)
 
     const router = useRouter()
     const channelName = useRoute().params.channelName as string

@@ -63,3 +63,5 @@ export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsS
 export type Channels = ReturnType<typeof useChannels>
 
 export const UseChannelsKey: InjectionKey<Channels> = Symbol('UseAuthMe')
+
+export const channelsDefault = useChannels({ _id: ref(''), name: ref('') }, { isAudioOn: ref(false), isVideoOn: ref(false) })
