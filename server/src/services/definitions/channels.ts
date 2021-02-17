@@ -1,3 +1,7 @@
+type SocketId = {
+  socketId: string;
+}
+
 type ChannelMemberFromClient = {
   _id: string;
   name: string;
@@ -5,15 +9,11 @@ type ChannelMemberFromClient = {
   isVideoOn: boolean;
 }
 
-type SocketId = {
-  socketId: string;
-}
-
 type ChannelMember = ChannelMemberFromClient & SocketId
 
 export type ChannelControlFromClient = {
   channelName: string;
-  channelMember: ChannelMember
+  channelMember: ChannelMemberFromClient
 }
 
 type ChannelControl = {

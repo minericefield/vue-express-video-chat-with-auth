@@ -32,9 +32,8 @@ export const init = (server: SeverT) => {
       channels.cleanup(arrivedConnectionIds, onChannelsUpdated)
     })
 
-    // safari disconnect delays?
+    // NOTE: maybe safari disconnect delays
     socket.on('disconnect', () => {
-      // just in case remove dusts on each client's init
       const arrivedConnectionIds = [...io.sockets.sockets.keys()].filter(socketId => socketId !== socket.id)
       channels.cleanup(arrivedConnectionIds, onChannelsUpdated)
     })
