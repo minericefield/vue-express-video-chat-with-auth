@@ -145,6 +145,7 @@ export default defineComponent({
     onBeforeRouteLeave(async (_, __, next) => {
       window.removeEventListener('beforeunload', execOnExit)
 
+      loader.displayLoader(true)
       if (joiningSucceed.value) {
         loader.displayLoader(true)
         try {
@@ -156,6 +157,7 @@ export default defineComponent({
           loader.displayLoader(false)
         }
       }
+      loader.displayLoader(false)
 
       next()
     })

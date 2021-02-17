@@ -23,7 +23,8 @@
           </h5>
         </div>
         <div class="modal-body">
-          After you permit it, press "Reinitialize" button below.
+          <p>After you permit it, press "Reinitialize" button below. </p>
+          <small>If you are using safari, you have to reload the browser after permiting it. </small>
         </div>
         <div class="modal-footer justify-content-center">
           <button
