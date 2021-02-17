@@ -6,7 +6,7 @@
     <agora-stream
       v-for="stream in streamList"
       :stream="stream"
-      :video-settings="getVideoSettingsFromStreamId(stream.getId())"
+      :member="getMemberFromStreamId(stream.getId())"
       :key="stream.getId()"
       :style="{ width: streamSize.width + 'px', height: streamSize.height + 'px' }"
     />
@@ -48,13 +48,9 @@ export default defineComponent({
   setup (props) {
     const { streamList, channelMembers } = toRefs(props)
     const streamListLength = computed(() => streamList.value.length)
-    const getVideoSettingsFromStreamId = computed(() => {
+    const getMemberFromStreamId = computed(() => {
       return (streamId: string) => {
-        const targetChannelMember = channelMembers.value.find((channelMember) => channelMember._id === streamId)
-        return {
-          isAudioOn: targetChannelMember?.isAudioOn,
-          isVideoOn: targetChannelMember?.isVideoOn
-        }
+        return channelMembers.value.find((channelMember) => channelMember._id === streamId)
       }
     })
 
@@ -92,7 +88,7 @@ export default defineComponent({
       doc,
       streamSize,
 
-      getVideoSettingsFromStreamId
+      getMemberFromStreamId
     }
   }
 })
