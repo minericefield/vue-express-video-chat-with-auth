@@ -56,15 +56,17 @@ export default defineComponent({
     const toasting = inject(UseToastingKey, toastingDefault)
     const { isAudioOn, isVideoOn, updateSettings: updateVideoSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const { _id: myId } = inject(UseAuthMeKey, authMeDefault)
-    const { joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey, channelsDefault)
+    const { getChannelFromItsName, joiningChannel, onJoin, onVideoSettingsUpdate, onExit } = inject(UseChannelsKey, channelsDefault)
 
     const router = useRouter()
     const channelName = useRoute().params.channelName as string
-    const isMediaPermissionAlertModalVisible = ref(false)
 
     const { client, init: initClient, exit } = useAgoraClient(myId)
     const { myStream, subscribeAccessHandledEvent, init: initStream, reCreateStream } = useAgoraStream(myId, { isAudioOn, isVideoOn })
     const { streamList, addStream, removeStream, subscribeStreamEvents } = useAgoraStreamList()
+
+    const isMediaPermissionAlertModalVisible = ref(false)
+    const joiningSucceed = ref(false)
 
     const initMe = async () => {
       await initStream()
@@ -111,11 +113,18 @@ export default defineComponent({
     onMounted(async () => {
       window.addEventListener('beforeunload', execOnExit)
 
+      if (getChannelFromItsName(channelName)?.members.find((member) => member._id === myId.value)) {
+        toasting.displayToasting({ message: 'You are already joining this channel.', isError: true })
+        return router.push({ name: 'Top' })
+      }
+
       subscribeStreamEvents(client)
       await initClient(channelName)
 
       subscribeAccessHandledEvent(() => {
         onJoin(channelName)
+        joiningSucceed.value = true
+        toasting.displayToasting({ message: `Joined channel "${channelName}" !` })
       }, () => {
         isMediaPermissionAlertModalVisible.value = true
       })
@@ -123,17 +132,21 @@ export default defineComponent({
     })
 
     onBeforeRouteLeave(async (_, __, next) => {
-      loader.displayLoader(true)
-      try {
-        await exit(myStream.value)
-      } catch (_) {
-        // 
-      } finally {
-        onExit(channelName)
-        window.removeEventListener('beforeunload', execOnExit)
-        loader.displayLoader(false)
-        next()
+      window.removeEventListener('beforeunload', execOnExit)
+
+      if (joiningSucceed.value) {
+        loader.displayLoader(true)
+        try {
+          await exit(myStream.value)
+        } catch (_) {
+          // 
+        } finally {
+          execOnExit()
+          loader.displayLoader(false)
+        }
       }
+
+      next()
     })
 
     return {
