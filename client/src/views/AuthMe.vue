@@ -1,37 +1,44 @@
 <template>
   <layout-default>
-    <div class="auth-me p-5">
-      <form-text-input
-        :text="userForm.name.text"
-        target="name"
-        label="Your name"
-        placeholder="Enter your name"
-        :errorMessage="userForm.name.errorMessage"
-        @on-update="onFormUpdate({ key: 'name', value: $event })"
-      />
-      <form-text-input
-        :text="userForm.email.text"
-        type="email"
-        target="email"
-        label="Email address"
-        placeholder="Enter your email address"
-        :errorMessage="userForm.email.errorMessage"
-        @on-update="onFormUpdate({ key: 'email', value: $event })"
-      />
-      <form-text-input
-        :text="userForm.password.text"
-        type="password"
-        target="password"
-        label="Password"
-        placeholder="Enter your password"
-        :errorMessage="userForm.password.errorMessage"
-        @on-update="onFormUpdate({ key: 'password', value: $event })"
-      />
-
-      <div class="text-center">
-        <button @click="onSubmit" class="btn btn-primary">
-          Update
+    <div class="auth-me">
+      <nav class="navbar">
+        <button class="btn btn-danger ml-auto">
+          Delete Account
         </button>
+      </nav>
+      <div class="px-5 pb-5">
+        <form-text-input
+          :text="userForm.name.text"
+          target="name"
+          label="Your name"
+          placeholder="Enter your name"
+          :errorMessage="userForm.name.errorMessage"
+          @on-update="onFormUpdate({ key: 'name', value: $event })"
+        />
+        <form-text-input
+          :text="userForm.email.text"
+          type="email"
+          target="email"
+          label="Email address"
+          placeholder="Enter your email address"
+          :errorMessage="userForm.email.errorMessage"
+          @on-update="onFormUpdate({ key: 'email', value: $event })"
+        />
+        <form-text-input
+          :text="userForm.password.text"
+          type="password"
+          target="password"
+          label="Password"
+          placeholder="Enter your password"
+          :errorMessage="userForm.password.errorMessage"
+          @on-update="onFormUpdate({ key: 'password', value: $event })"
+        />
+
+        <div class="text-center">
+          <button @click="onSubmit" class="btn btn-primary">
+            Update
+          </button>
+        </div>
       </div>
     </div>
   </layout-default>
