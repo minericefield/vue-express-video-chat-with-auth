@@ -18,3 +18,13 @@ userRouter.put('/api/user', async (req: Request, res: Response) => {
     res.status(500).json()
   }
 })
+
+userRouter.delete('/api/user', async (req: Request, res: Response) => {
+  try {
+    await userController.destroy(req.session.userId)
+    req.session.userId = null
+    res.json()
+  } catch (error) {
+    res.status(500).json()
+  }
+})
