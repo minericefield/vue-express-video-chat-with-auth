@@ -22,6 +22,6 @@ export default class AuthApi extends BaseApi {
   }
 
   public logout () {
-    return this.request({ url: '', method: 'DELETE' })
+    return this.request<undefined, undefined>({ url: '', method: 'DELETE' })
   }
 }
