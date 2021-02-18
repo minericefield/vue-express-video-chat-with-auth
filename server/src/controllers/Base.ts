@@ -59,15 +59,13 @@ export default class BaseController <T extends Document> {
 
   public destroy (id: string) {
     return new Promise((resolve, reject) => {
-      try {
-        this.model.deleteOne({ _id: id }, null, (error) => {
-          throw error
-        })
-
-        resolve(id)
-      } catch (error) {
-        reject(error)
-      }
+      this.model.deleteOne({ _id: id }, null, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(id)
+        }
+      })
     })
   }
 }

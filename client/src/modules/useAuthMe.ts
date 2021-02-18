@@ -56,7 +56,7 @@ export const useAuthMe = () => {
   const deleteAccount = async () => {
     const result = await new UserApi().delete()
     if (result.succeed) {
-      await router.push({ name: 'AuthRegister' })
+      router.push({ name: 'AuthRegister' })
       resetMyInfo()
     }
   }
