@@ -5,6 +5,7 @@ import { UserResponse } from '../types/swagger/'
 import router from '../router/'
 
 import AuthApi from '../api/Auth'
+import UserApi from '../api/User'
 
 export type Me = {
   isAuthenticated: boolean;
@@ -52,12 +53,21 @@ export const useAuthMe = () => {
     }
   }
 
+  const deleteAccount = async () => {
+    const result = await new UserApi().delete()
+    if (result.succeed) {
+      await router.push({ name: 'AuthRegister' })
+      resetMyInfo()
+    }
+  }
+
   return {
     ...toRefs(me),
 
     fetchMyInfo,
     updateMyInfo,
-    logout
+    logout,
+    deleteAccount
   }
 }
 
