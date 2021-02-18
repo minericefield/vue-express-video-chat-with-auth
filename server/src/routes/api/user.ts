@@ -15,7 +15,7 @@ userRouter.put('/api/user', async (req: Request, res: Response) => {
       email: userDoc.email
     })
   } catch (error) {
-    res.status(500).json()
+    res.status(500).end()
   }
 })
 
@@ -23,8 +23,10 @@ userRouter.delete('/api/user', async (req: Request, res: Response) => {
   try {
     await userController.destroy(req.session.userId)
     req.session.userId = null
-    res.json()
+    res.end()
   } catch (error) {
-    res.status(500).json()
+    res.status(500).end()
   }
 })
+
+// TODO: error handling

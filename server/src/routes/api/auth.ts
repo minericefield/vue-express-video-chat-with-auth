@@ -8,6 +8,8 @@ export const authRouter = express.Router()
 
 authRouter.get('/api/auth', async (req: Request, res: Response) => {
   try {
+    if (!req.session.userId) throw new Error()
+
     const userDoc = await authController.isUserActive(req.session.userId)
     res.json({
       _id: userDoc._id,
@@ -15,16 +17,16 @@ authRouter.get('/api/auth', async (req: Request, res: Response) => {
       email: userDoc.email
     })
   } catch (error) {
-    res.status(500).json()
+    res.status(500).end()
   }
 })
 
 authRouter.post('/api/auth', async (req: Request, res: Response) => {
   try {
     await authController.register(req.body)
-    res.json()
+    res.end()
   } catch (error) {
-    res.status(500).json()
+    res.status(500).end()
   }
 })
 
@@ -38,11 +40,13 @@ authRouter.put('/api/auth', async (req: Request, res: Response) => {
       email: userDoc.email
     })
   } catch (error) {
-    res.status(500).json()
+    res.status(500).end()
   }
 })
 
 authRouter.delete('/api/auth', async (req: Request, res: Response) => {
   req.session.userId = null
-  res.json()
+  res.end()
 })
+
+// TODO: error handling
