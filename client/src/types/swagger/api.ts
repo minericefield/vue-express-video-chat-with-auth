@@ -231,6 +231,36 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Delete account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserDelete: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update user profile
          * @param {RegistrationRequest} registrationRequest params to update profile
          * @param {*} [options] Override http request option.
@@ -319,6 +349,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiUserDelete(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiUserDelete(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update user profile
          * @param {RegistrationRequest} registrationRequest params to update profile
          * @param {*} [options] Override http request option.
@@ -375,6 +415,15 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthPut(loginRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiUserDelete(options?: any): AxiosPromise<void> {
+            return localVarFp.apiUserDelete(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -440,6 +489,17 @@ export class DefaultApi extends BaseAPI {
      */
     public apiAuthPut(loginRequest: LoginRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiAuthPut(loginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiUserDelete(options?: any) {
+        return DefaultApiFp(this.configuration).apiUserDelete(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

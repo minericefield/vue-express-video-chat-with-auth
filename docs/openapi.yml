@@ -69,6 +69,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+    
+    delete:
+      summary: Delete account
+      responses:
+        '200':
+          description: succeed
 
 components:
   schemas:
