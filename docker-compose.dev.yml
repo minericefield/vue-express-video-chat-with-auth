@@ -49,7 +49,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${DB_AUTH_NAME}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_AUTH_PASSWORD}
     ports:
-      - 27099:27017
+      - 27017:27017
     volumes:
       # - ./db/init.dev.js:/docker-entrypoint-initdb.d/001_users.js:ro
       - db:/data/db
@@ -60,14 +60,14 @@ services:
   redis:
     image: redis:6.0-alpine
     ports:
-      - 6399:6379
+      - 6379:6379
     volumes:
       - redis:/data
   
   mailhog:
     image: mailhog/mailhog:v1.0.1
     ports:
-      - 8029:8025
+      - 8025:8025
 
 volumes:
   node_modules_client:
