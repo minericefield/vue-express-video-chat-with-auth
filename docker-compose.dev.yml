@@ -5,8 +5,6 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
-    environment:
-      VUE_APP_HOST: ${HOST}
     volumes:
       - ./client:/usr/src
       - public:/usr/src/dist

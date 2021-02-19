@@ -10,7 +10,7 @@ export type Channel = {
   members: ChannelMember[];
 }
 
-const socket = io(process.env.VUE_APP_HOST, {
+const socket = io('', {
   transports: ['websocket', 'polling', 'flashsocket'],
 })
 
