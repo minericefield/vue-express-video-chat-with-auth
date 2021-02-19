@@ -15,13 +15,24 @@
         </button>
       </nav>
 
-      <div class="top-body d-flex flex-wrap flex-grow-1 justify-content-between px-3 pb-2w-100 overflow-auto">
-        <channel-preview
-          v-for="channel in channels"
-          :key="channel.name"
-          :channel="channel"
-          @on-joinning-channel-apply="joinChannel(channel.name)"
-        />
+      <div class="px-3">
+        <h4>
+          Active Channels you can join
+        </h4>
+        <div
+          v-if="!!channels.length"
+          class="top-body d-flex flex-wrap flex-grow-1 justify-content-between px-3 pb-2 w-100 overflow-auto"
+        >
+          <channel-preview
+            v-for="channel in channels"
+            :key="channel.name"
+            :channel="channel"
+            @on-joinning-channel-apply="joinChannel(channel.name)"
+          />
+        </div>
+        <p class="text-center text-muted p-3">
+          - No active channels -
+        </p>
       </div>
 
       <teleport to="#modal-overlay">
