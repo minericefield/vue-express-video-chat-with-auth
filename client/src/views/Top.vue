@@ -16,12 +16,12 @@
       </nav>
 
       <div class="px-3">
-        <h4>
+        <h4 class="pb-2">
           Active Channels you can join
         </h4>
         <div
           v-if="!!channels.length"
-          class="top-body d-flex flex-wrap flex-grow-1 justify-content-between px-3 pb-2 w-100 overflow-auto"
+          class="top-body d-flex flex-wrap flex-grow-1 justify-content-between pb-2 w-100 overflow-auto"
         >
           <channel-preview
             v-for="channel in channels"
@@ -30,7 +30,7 @@
             @on-joinning-channel-apply="joinChannel(channel.name)"
           />
         </div>
-        <p class="text-center text-muted p-3">
+        <p v-else class="text-center text-muted">
           - No active channels -
         </p>
       </div>
