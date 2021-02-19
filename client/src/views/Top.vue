@@ -20,13 +20,14 @@
           v-for="channel in channels"
           :key="channel.name"
           :channel="channel"
+          @on-joinning-channel-apply="joinChannel(channel.name)"
         />
       </div>
 
       <teleport to="#modal-overlay">
         <create-channel-modal
           v-if="isCreateChannelModalVisible"
-          @on-channel-defined="joinChannel"
+          @on-channel-defined="isCreateChannelModalVisible = false, joinChannel($event)"
           @on-left="isCreateChannelModalVisible = false"
         />
       </teleport>
@@ -58,7 +59,6 @@ export default defineComponent({
     const router = useRouter()
 
     const joinChannel = (channelName: string) => {
-      isCreateChannelModalVisible.value = false
       router.push({ name: 'Communication', params: { channelName } })
     }
 
