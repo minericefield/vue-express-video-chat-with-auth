@@ -55,6 +55,31 @@
                   {{ member.name }}
                 </p>
               </div>
+
+              <div>
+                <p>
+                  Enable audio / video settings
+                </p>
+                <div class="d-flex">
+                  <circle-icon-button
+                    icon="mic"
+                    class="mr-4"
+                    :is-active="isAudioOn"
+                    @on-click="updateSettings({ isAudioOn: !isAudioOn })"
+                  />
+                  <circle-icon-button
+                    icon="videocam"
+                    :is-active="isVideoOn"
+                    @on-click="updateSettings({ isVideoOn: !isVideoOn})"
+                  />
+                </div>
+                <p
+                  v-if="videoSettigsErrorMessage"
+                  class="text-danger"
+                >
+                  {{ videoSettigsErrorMessage }}
+                </p>
+              </div>
             </div>
             <div class="modal-footer">
               <button
@@ -67,7 +92,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                @click.stop="$emit('onJoinningChannelApply')"
+                @click.stop="onSubmit"
               >
                 Yes
               </button>
@@ -80,21 +105,50 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, ref } from 'vue'
+import { PropType, defineComponent, ref, inject } from 'vue'
 
+import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
 import { Channel } from '../modules/useChannels'
 
+import CircleIconButton from './CircleIconButton.vue'
+
 export default defineComponent({
+  components: {
+    CircleIconButton
+  },
   props: {
     channel: {
       type: Object as PropType<Channel>
     }
   },
-  setup () {
+  setup (_, ctx) {
     const isChannelDetailOverlayVisible = ref(false)
 
+    const { isAudioOn, isVideoOn, updateSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
+    const videoSettigsErrorMessage = ref('')
+
+    const validate = () => { // TODO: make validation module
+      videoSettigsErrorMessage.value = ''
+
+      if (!isAudioOn.value && !isVideoOn.value) {
+        videoSettigsErrorMessage.value = 'Either must be enabled.'
+      }
+
+      return !videoSettigsErrorMessage.value
+    }
+
+    const onSubmit = () => {
+      if (validate()) ctx.emit('on-joinning-channel-apply')
+    }
+
     return {
-      isChannelDetailOverlayVisible
+      isChannelDetailOverlayVisible,
+
+      isAudioOn,
+      isVideoOn,
+      updateSettings,
+      videoSettigsErrorMessage,
+      onSubmit
     }
   }
 })
