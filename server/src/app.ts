@@ -19,6 +19,7 @@ const redisClient = redis.createClient(6379, process.env.REDIS_HOST, {
 app.use(cookieParser())
 app.use(expressSession({
   secret: process.env.SESSION_SECRET,
+  name: 'sessionId',
   cookie: {
     maxAge: 24 * 60 * 60 * 100 * 100,
     secure: false,
