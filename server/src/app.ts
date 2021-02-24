@@ -6,6 +6,8 @@ import expressSession from 'express-session'
 import csrf from 'csurf'
 import connectRedis from 'connect-redis'
 import redis from 'redis'
+import helmet from 'helmet'
+import noCache from 'nocache'
 
 import { Renderers, Api } from './routes'
 
@@ -35,6 +37,9 @@ app.use(expressSession({
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:true }))
+
+app.use(helmet.hidePoweredBy())
+app.use(noCache())
 
 /**
  * https://github.com/expressjs/csurf/issues/193
