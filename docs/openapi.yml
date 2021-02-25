@@ -16,6 +16,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+
     post:
       summary: Create your account
       requestBody:
@@ -48,6 +49,20 @@ paths:
     
     delete:
       summary: Logout
+      responses:
+        '200':
+          description: succeed
+  
+  /api/auth/resend:
+    post:
+      summary: Resend verification email
+      requestBody:
+        description: params to resend email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendRequest'
       responses:
         '200':
           description: succeed
@@ -99,6 +114,12 @@ components:
       required:
         - email
         - password
+    ResendRequest:
+      properties:
+        email:
+          type: string
+      required:
+        - email
     UserResponse:
       properties:
         _id:
