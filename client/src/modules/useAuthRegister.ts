@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, Ref } from 'vue'
 
 import { Loader } from './useLoader'
 import { Toasting } from './useToasting'
@@ -51,7 +51,7 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
     const result = await new AuthApi().register(params)
     loader.displayLoader(false)
     if (result.succeed) {
-      toasting.displayToasting({ message: 'Please check your email to verify your account.', isError: false })
+      toasting.displayToasting({ message: 'Please check your email to verify your account.' })
     } else {
       toasting.displayToasting({ message: 'Registration failed.', isError: true }) // TODO: proper error handling with server response
     }
@@ -65,11 +65,26 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
     }
   }
 
+  const resendEmail = async (email: Ref<string>) => {
+    loader.displayLoader(true)
+    const params = {
+      email: email.value
+    }
+    const result = await new AuthApi().resend(params)
+    loader.displayLoader(false)
+    if (result.succeed) {
+      toasting.displayToasting({ message: 'Please check your email to verify your account.' })
+    } else {
+      toasting.displayToasting({ message: 'Resending failed.', isError: true }) // TODO: proper error handling with server response
+    }
+  }
+
   return {
     userForm,
 
     onFormUpdate,
     validate,
-    onSubmit
+    onSubmit,
+    resendEmail
   }
 }
