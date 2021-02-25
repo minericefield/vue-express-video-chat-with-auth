@@ -1,6 +1,11 @@
 import { AxiosRequestConfig } from 'axios'
 
-import { RegistrationRequest, LoginRequest, UserResponse } from '../types/swagger'
+import {
+  RegistrationRequest,
+  LoginRequest,
+  ResendRequest,
+  UserResponse
+} from '../types/swagger'
 
 import BaseApi from './Base'
 
@@ -23,5 +28,9 @@ export default class AuthApi extends BaseApi {
 
   public logout () {
     return this.request<undefined, undefined>({ url: '', method: 'DELETE' })
+  }
+
+  public resend (resendRequest: ResendRequest) {
+    return this.request<ResendRequest, undefined>({ url: 'resend', method: 'POST', data: resendRequest })
   }
 }

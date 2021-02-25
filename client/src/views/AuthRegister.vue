@@ -1,8 +1,15 @@
 <template>
   <div class="auth-register p-5">
-    <h2 class="mb-4">
+    <h2 class="mb-2">
       Register
     </h2>
+
+    <router-link 
+      to="/login"
+      class="d-flex justify-content-end mb-2 font-weight-bold text-info under-lined cursor-pointer"
+    >
+      Go back to login
+    </router-link>
 
     <form-text-input
       :text="userForm.name.text"
@@ -37,40 +44,53 @@
       </button>
     </div>
 
-    <router-link 
-      to="/login"
-      class="d-block mt-4 mr-auto font-weight-bold text-info text-center under-lined cursor-pointer"
+    <p
+      @click="isResendEmailModalVisible = true"
+      class="mt-4 mb-0 font-weight-bold text-info text-center under-lined cursor-pointer"
     >
-      Go back to login
-    </router-link>
+      Resend email
+    </p>
+
+    <resend-email-modal
+      v-if="isResendEmailModalVisible"
+      :default-email="userForm.email.text"
+      @on-submit="isResendEmailModalVisible = false, resendEmail($event)"
+      @on-cancel="isResendEmailModalVisible = false"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 
 import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
 import { useAuthRegister } from '../modules/useAuthRegister'
 
 import FormTextInput from '../components/FormTextInput.vue'
+import ResendEmailModal from '../components/ResendEmailModal.vue'
 
 export default defineComponent({
   name: 'AuthRegister',
   components: {
-    FormTextInput
+    FormTextInput,
+    ResendEmailModal
   },
   setup () {
     const loader = inject(UseLoaderKey, loaderDefault)
     const toasting = inject(UseToastingKey, toastingDefault)
 
-    const { userForm, onFormUpdate, onSubmit } = useAuthRegister({ loader, toasting })
+    const isResendEmailModalVisible = ref(false)
+
+    const { userForm, onFormUpdate, onSubmit, resendEmail } = useAuthRegister({ loader, toasting })
 
     return {
       userForm,
+      isResendEmailModalVisible,
 
       onFormUpdate,
-      onSubmit
+      onSubmit,
+      resendEmail
     }
   }
 })

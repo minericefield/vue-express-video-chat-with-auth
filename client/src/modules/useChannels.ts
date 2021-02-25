@@ -10,8 +10,9 @@ export type Channel = {
   members: ChannelMember[];
 }
 
-const socket = io('', {
-  transports: ['websocket', 'polling', 'flashsocket'],
+const socket = io(process.env.VUE_APP_SOCKET_HOST || '', {
+  path: '/sockets/channels',
+  transports: ['websocket', 'polling']
 })
 
 export const useChannels = (me: ToRefs<Pick<Me, "_id" | "name">>, videoSettingsState: ToRefs<VideoSettingsState>) => {

@@ -55,6 +55,7 @@ export default defineComponent({
 .toasting {
   top: 24px;
   left: 24px;
+  max-width: calc(100vw - 36px);
 }
 
 .toasting-fade-enter-active,

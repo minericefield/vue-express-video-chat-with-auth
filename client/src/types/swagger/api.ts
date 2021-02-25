@@ -68,6 +68,19 @@ export interface RegistrationRequest {
 /**
  * 
  * @export
+ * @interface ResendRequest
+ */
+export interface ResendRequest {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResendRequest
+     */
+    email: string;
+}
+/**
+ * 
+ * @export
  * @interface UserResponse
  */
 export interface UserResponse {
@@ -231,6 +244,42 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Resend verification email
+         * @param {ResendRequest} resendRequest params to resend email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthResendPost: async (resendRequest: ResendRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'resendRequest' is not null or undefined
+            assertParamExists('apiAuthResendPost', 'resendRequest', resendRequest)
+            const localVarPath = `/api/auth/resend`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(resendRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Delete account
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -349,6 +398,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Resend verification email
+         * @param {ResendRequest} resendRequest params to resend email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async apiAuthResendPost(resendRequest: ResendRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiAuthResendPost(resendRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Delete account
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -415,6 +475,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         apiAuthPut(loginRequest: LoginRequest, options?: any): AxiosPromise<UserResponse> {
             return localVarFp.apiAuthPut(loginRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Resend verification email
+         * @param {ResendRequest} resendRequest params to resend email
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        apiAuthResendPost(resendRequest: ResendRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.apiAuthResendPost(resendRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -489,6 +559,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiAuthPut(loginRequest: LoginRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiAuthPut(loginRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Resend verification email
+     * @param {ResendRequest} resendRequest params to resend email
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public apiAuthResendPost(resendRequest: ResendRequest, options?: any) {
+        return DefaultApiFp(this.configuration).apiAuthResendPost(resendRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

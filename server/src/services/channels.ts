@@ -6,7 +6,12 @@ import { ChannelControlFromClient, Channels } from './definitions/channels'
 const channels = new Channels()
 
 export const init = (server: SeverT) => {
-  const io = new Server(server)
+  const io = new Server(server, {
+    path: '/sockets/channels',
+    maxHttpBufferSize: 1024,
+    pingInterval: 60 * 1000,
+    pingTimeout: 4 * 60 * 1000
+  })
   const onChannelsUpdated = () => {
     io.emit('on_channels_updated', channels.channelsForResponse)
   }
