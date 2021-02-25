@@ -49,4 +49,13 @@ authRouter.delete('/api/auth', async (req: Request, res: Response) => {
   res.end()
 })
 
+authRouter.post('/api/auth/resend', async (req: Request, res: Response) => {
+  try {
+    await authController.resend(req.body)
+    res.end()
+  } catch (error) {
+    res.status(500).end()
+  }
+})
+
 // TODO: error handling

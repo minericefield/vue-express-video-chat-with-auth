@@ -63,4 +63,11 @@ export default class AuthController extends UserController {
       })
     })
   }
+
+  public async resend ({ email }: { email: string }) {
+    const userDoc = await this.model.findOne({ email })
+    await this.sendVerifyEmail(userDoc)
+
+    return userDoc
+  }
 }
