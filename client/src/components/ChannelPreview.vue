@@ -65,12 +65,12 @@
                     icon="mic"
                     class="mr-4"
                     :is-active="isAudioOn"
-                    @on-click="updateSettings({ isAudioOn: !isAudioOn })"
+                    @on-click="updateVideoSettings({ isAudioOn: !isAudioOn })"
                   />
                   <circle-icon-button
                     icon="videocam"
                     :is-active="isVideoOn"
-                    @on-click="updateSettings({ isVideoOn: !isVideoOn})"
+                    @on-click="updateVideoSettings({ isVideoOn: !isVideoOn})"
                   />
                 </div>
                 <p
@@ -107,7 +107,7 @@
 <script lang="ts">
 import { PropType, defineComponent, ref, inject } from 'vue'
 
-import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
+import { State as VideoSettingsState, UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
 import { Channel } from '../modules/useChannels'
 
 import CircleIconButton from './CircleIconButton.vue'
@@ -127,14 +127,17 @@ export default defineComponent({
     const { isAudioOn, isVideoOn, updateSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const videoSettigsErrorMessage = ref('')
 
-    const validate = () => { // TODO: make validation module
-      videoSettigsErrorMessage.value = ''
+    const isValidationOnGoing = ref(false)
 
-      if (!isAudioOn.value && !isVideoOn.value) {
-        videoSettigsErrorMessage.value = 'Either must be enabled.'
-      }
-
+    const validate = () => {
+      isValidationOnGoing.value = true
+      videoSettigsErrorMessage.value = !isAudioOn.value && !isVideoOn.value ? 'Either must be enabled.' : ''
       return !videoSettigsErrorMessage.value
+    }
+
+    const updateVideoSettings = ({ isAudioOn, isVideoOn }: VideoSettingsState) => {
+      updateSettings({ isAudioOn, isVideoOn })
+      if (isValidationOnGoing.value) validate()
     }
 
     const onSubmit = () => {
@@ -148,6 +151,8 @@ export default defineComponent({
       isVideoOn,
       updateSettings,
       videoSettigsErrorMessage,
+
+      updateVideoSettings,
       onSubmit
     }
   }
