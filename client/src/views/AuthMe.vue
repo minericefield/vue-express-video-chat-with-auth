@@ -63,14 +63,11 @@ import { defineComponent, ref, inject, onMounted } from 'vue'
 
 import { UseLoaderKey, loaderDefault } from '../modules/useLoader'
 import { UseToastingKey, toastingDefault } from '../modules/useToasting'
-import { UseAuthMeKey, authMeDefault } from '../modules/useAuthMe'
-import { useAuthRegister } from '../modules/useAuthRegister'
+import { UseAuthMeKey, authMeDefault, useAuthMeForm } from '../modules/useAuthMe'
 
 import LayoutDefault from '../layouts/LayoutDefault.vue'
 import FormTextInput from '../components/FormTextInput.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
-
-import UserApi from '../api/User'
 
 export default defineComponent({
   name: 'AuthMe',
@@ -84,29 +81,13 @@ export default defineComponent({
     const toasting = inject(UseToastingKey, toastingDefault)
 
     const { name, email, updateMyInfo, deleteAccount } = inject(UseAuthMeKey, authMeDefault)
-    const { userForm, onFormUpdate, validate } = useAuthRegister({ loader, toasting })
+    const { userForm, onFormUpdate, onSubmit: onSubmitAuthMeForm } = useAuthMeForm({ loader, toasting })
 
     const isAccountDeletionConfirmModalVisible = ref(false)
 
     const onSubmit = async () => {
-      validate()
-
-      if (Object.values(userForm).every((value) => value.errorMessage === '')) {
-        loader.displayLoader(true)
-        const params = {
-          name: userForm.name.text,
-          email: userForm.email.text,
-          password: userForm.password.text
-        }
-        const result = await new UserApi().update(params)
-        if (result.succeed) {
-          toasting.displayToasting({ message: 'Profile successfully updated.' })
-          updateMyInfo(true, result.data)
-        } else {
-          toasting.displayToasting({ message: 'Updating failed.', isError: true }) // TODO: proper error handling with server response
-        }
-        loader.displayLoader(false)
-      }
+      const result = await onSubmitAuthMeForm()
+      if (result.succeed) updateMyInfo(true, result.data)
     }
 
     onMounted(() => {
