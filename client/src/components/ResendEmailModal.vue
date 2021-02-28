@@ -77,7 +77,9 @@ export default defineComponent({
       email.value = props.defaultEmail
     })
 
-    const onLeft = ref(() => undefined)
+    const onLeft = ref(() => {
+      //
+    })
     const onCancel = () => {
       onLeft.value = () => { ctx.emit('on-cancel') }
       isModalContentVisible.value = false
