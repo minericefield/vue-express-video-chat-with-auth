@@ -91,7 +91,7 @@ export default defineComponent({
     CircleIconButton
   },
   setup (_, ctx) {
-     const isModalContentVisible = ref(false)
+    const isModalContentVisible = ref(false)
 
     const { isAudioOn, isVideoOn, updateSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const videoSettigsErrorMessage = ref('')
