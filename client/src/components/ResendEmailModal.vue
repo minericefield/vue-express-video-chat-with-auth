@@ -25,7 +25,7 @@
             label="Email address"
             placeholder="Enter your email address"
             :errorMessage="errorMessage"
-            @on-update="email = $event"
+            @on-update="updateEmail"
           />
         </div>
         <div class="modal-footer">
@@ -54,6 +54,8 @@ import { defineComponent, ref, onMounted, nextTick } from 'vue'
 
 import FormTextInput from './FormTextInput.vue'
 
+import { isNotEmpty, isEmail } from '../services/validator'
+
 export default defineComponent({
   name: 'ResendEmailModal',
   components: {
@@ -70,26 +72,38 @@ export default defineComponent({
     const action = ref('')
     const email = ref('')
     const errorMessage = ref('')
+    const isValidationOnGoing = ref(false)
 
     onMounted(async () => {
+      email.value = props.defaultEmail
       await nextTick()
       isModalContentVisible.value = true
-      email.value = props.defaultEmail
     })
 
-    const onLeft = ref(() => undefined)
+    const onLeft = ref(() => {
+      //
+    })
     const onCancel = () => {
       onLeft.value = () => { ctx.emit('on-cancel') }
       isModalContentVisible.value = false
     }
+
+    const validate = () => {
+      isValidationOnGoing.value = true
+      errorMessage.value = isNotEmpty(email.value.trim()) || isEmail(email.value.trim())
+      return !errorMessage.value
+    }
+
+    const updateEmail = (_email: string) => {
+      email.value = _email
+      if (isValidationOnGoing.value) validate()
+    }
+
     const onSubmit = () => {
-      errorMessage.value = ''
-      if (email.value.trim() === '') { // TODO: make validation module
-        errorMessage.value = 'Please enter your password.'
-        return
+      if (validate()) {
+        onLeft.value = () => { ctx.emit('on-submit', email) }
+        isModalContentVisible.value = false
       }
-      onLeft.value = () => { ctx.emit('on-submit', email) }
-      isModalContentVisible.value = false
     }
 
     return {
@@ -99,6 +113,7 @@ export default defineComponent({
       errorMessage,
 
       onLeft,
+      updateEmail,
       onCancel,
       onSubmit
     }

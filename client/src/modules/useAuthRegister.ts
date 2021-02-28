@@ -1,12 +1,16 @@
-import { reactive, Ref } from 'vue'
+import { Ref, reactive, ref } from 'vue'
+
+import { Form } from '../types/Form'
 
 import { Loader } from './useLoader'
 import { Toasting } from './useToasting'
 
 import AuthApi from '../api/Auth'
 
+import { isNotEmpty, isEmail, isLengthLowerThan, isPassword, areNoErrorsExistInForm } from '../services/validator'
+
 export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting: Toasting }) => {
-  const userForm = reactive({
+  const userForm = reactive<Form>({
     name: {
       text: '',
       errorMessage: ''
@@ -20,24 +24,20 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
       errorMessage: ''
     }
   })
+  const isValidationOnGoing = ref(false)
+
+  const validate = () => {
+    isValidationOnGoing.value = true
+    userForm.name.errorMessage = isNotEmpty(userForm.name.text.trim()) || isLengthLowerThan(userForm.name.text.trim(), 20)
+    userForm.email.errorMessage = isNotEmpty(userForm.email.text.trim()) || isEmail(userForm.email.text.trim())
+    userForm.password.errorMessage = isNotEmpty(userForm.password.text.trim()) || isPassword(userForm.password.text.trim())
+    return areNoErrorsExistInForm(userForm)
+  }
 
   const onFormUpdate = ({ key, value }: { key: 'name' | 'email' | 'password'; value: string }) => {
     userForm[key].text = value
-  }
-
-  const validate = () => { // TODO: make validation module
-    userForm.name.errorMessage = ''
-    userForm.email.errorMessage = ''
-    userForm.password.errorMessage = ''
-
-    if (userForm.name.text.trim() === '') {
-      userForm.name.errorMessage = 'Please enter your name.'
-    }
-    if (userForm.email.text.trim() === '') { // TODO: validation for email
-      userForm.email.errorMessage = 'Please enter your email address.'
-    }
-    if (userForm.password.text.trim() === '') { // TODO: validation for password and confirmation
-      userForm.password.errorMessage = 'Please enter your password.'
+    if (isValidationOnGoing.value) {
+      validate()
     }
   }
 
@@ -58,9 +58,7 @@ export const useAuthRegister = ({ loader, toasting }: { loader: Loader; toasting
   }
 
   const onSubmit = async () => {
-    validate()
-
-    if (Object.values(userForm).every((value) => value.errorMessage === '')) {
+    if (validate()) {
       await register()
     }
   }

@@ -21,7 +21,8 @@ export const useVideoSettings = () => {
 
   const restoreSettings = () => {
     const restoredState = get<State | undefined>('videoSettings')
-    if (restoredState) updateSettings(restoredState)
+    if (!restoredState || (!restoredState.isAudioOn && !restoredState.isVideoOn)) return
+    updateSettings(restoredState)
   }
 
   return {

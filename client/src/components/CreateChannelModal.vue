@@ -25,7 +25,7 @@
               label="Channel Name"
               placeholder="Enter the channel name"
               :errorMessage="channelName.errorMessage"
-              @on-update="channelName.text = $event"
+              @on-update="updateChannelName"
             />
           </div>
 
@@ -38,12 +38,12 @@
                 icon="mic"
                 class="mr-4"
                 :is-active="isAudioOn"
-                @on-click="updateSettings({ isAudioOn: !isAudioOn })"
+                @on-click="updateVideoSettings({ isAudioOn: !isAudioOn })"
               />
               <circle-icon-button
                 icon="videocam"
                 :is-active="isVideoOn"
-                @on-click="updateSettings({ isVideoOn: !isVideoOn})"
+                @on-click="updateVideoSettings({ isVideoOn: !isVideoOn})"
               />
             </div>
             <p
@@ -78,9 +78,11 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, inject, onMounted, nextTick } from 'vue'
 
-import { UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
+import { State as VideoSettingsState, UseVideoSettingsKey, videoSettingsDefault } from '../modules/useVideoSettings'
 import FormTextInput from './FormTextInput.vue'
 import CircleIconButton from './CircleIconButton.vue'
+
+import { isNotEmpty, isLengthLowerThan, isAlpha } from '../services/validator'
 
 export default defineComponent({
   name: 'CreateChannelModal',
@@ -94,29 +96,30 @@ export default defineComponent({
     const { isAudioOn, isVideoOn, updateSettings } = inject(UseVideoSettingsKey, videoSettingsDefault)
     const videoSettigsErrorMessage = ref('')
 
+    const isValidationOnGoing = ref(false)
+
     const channelName = reactive({
       text: '',
       errorMessage: ''
     })
 
-    const validate = () => { // TODO: make validation module
-      let errorDoesntExist = true
-      channelName.errorMessage = ''
-      videoSettigsErrorMessage.value = ''
+    const validate = () => {
+      isValidationOnGoing.value = true
 
-      if (channelName.text.trim() === '') {
-        errorDoesntExist = false
-        channelName.errorMessage = 'Please provide channel name.'
-      } else if (!/^[0-9a-zA-Z_]+$/.test(channelName.text)) {
-        errorDoesntExist = false
-        channelName.errorMessage = 'Channel name must be English.'
-      }
-      if (!isAudioOn.value && !isVideoOn.value) {
-        errorDoesntExist = false
-        videoSettigsErrorMessage.value = 'Either must be enabled.'
-      }
+      videoSettigsErrorMessage.value = !isAudioOn.value && !isVideoOn.value ? 'Either must be enabled.' : ''
+      channelName.errorMessage = isNotEmpty(channelName.text.trim()) || isLengthLowerThan(channelName.text.trim(), 10) || isAlpha(channelName.text.trim())
 
-      return errorDoesntExist
+      return !videoSettigsErrorMessage.value && !channelName.errorMessage
+    }
+
+    const updateVideoSettings = ({ isAudioOn, isVideoOn }: VideoSettingsState) => {
+      updateSettings({ isAudioOn, isVideoOn })
+      if (isValidationOnGoing.value) validate()
+    }
+
+    const updateChannelName = (_channelName: string) => {
+      channelName.text = _channelName
+      if (isValidationOnGoing.value) validate()
     }
 
     const onSubmit = () => {
@@ -130,13 +133,14 @@ export default defineComponent({
 
     return {
       isModalContentVisible,
-
       isAudioOn,
       isVideoOn,
-      updateSettings,
+      channelName,
+      isValidationOnGoing,
       videoSettigsErrorMessage,
 
-      channelName,
+      updateVideoSettings,
+      updateChannelName,
 
       onSubmit
     }

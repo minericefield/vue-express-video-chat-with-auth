@@ -1,8 +1,13 @@
 import { reactive, InjectionKey, toRefs } from 'vue'
 
+import { Loader } from './useLoader'
+import { Toasting } from './useToasting'
+
 import { UserResponse } from '../types/swagger/'
 
 import router from '../router/'
+
+import { useAuthRegister } from './useAuthRegister'
 
 import AuthApi from '../api/Auth'
 import UserApi from '../api/User'
@@ -76,3 +81,34 @@ export type AuthMe = ReturnType<typeof useAuthMe>
 export const UseAuthMeKey: InjectionKey<AuthMe> = Symbol('UseAuthMe')
 
 export const authMeDefault = useAuthMe()
+
+export const useAuthMeForm = ({ loader, toasting }: { loader: Loader; toasting: Toasting }) => {
+  const { userForm, onFormUpdate, validate } = useAuthRegister({ loader, toasting })
+
+  const onSubmit = async () => {
+    if (validate()) {
+      loader.displayLoader(true)
+      const params = {
+        name: userForm.name.text,
+        email: userForm.email.text,
+        password: userForm.password.text
+      }
+      const result = await new UserApi().update(params)
+      if (result.succeed) {
+        toasting.displayToasting({ message: 'Profile successfully updated.' })
+      } else {
+        toasting.displayToasting({ message: 'Updating failed.', isError: true }) // TODO: proper error handling with server response
+      }
+      loader.displayLoader(false)
+
+      return result
+    }
+  }
+
+  return {
+    userForm,
+
+    onFormUpdate,
+    onSubmit
+  }
+}
