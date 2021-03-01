@@ -33,7 +33,7 @@ services:
       - 3000:3000
     volumes:
       - ./server:/usr/src
-      - public:/usr/src/src/public
+      - public:/usr/src/src/client
       - node_modules_server:/usr/src/node_modules
     stdin_open: true
     tty: true

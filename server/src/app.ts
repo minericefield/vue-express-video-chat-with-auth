@@ -47,7 +47,7 @@ app.use(noCache())
  */
 app.use(csrf({ cookie: false }))
 
-const staticDir = path.resolve(__dirname, 'public')
+const staticDir = path.resolve(__dirname, 'client')
 app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
 
 app.use(Renderers(staticDir))
