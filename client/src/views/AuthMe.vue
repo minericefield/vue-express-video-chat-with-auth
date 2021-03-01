@@ -87,7 +87,7 @@ export default defineComponent({
 
     const onSubmit = async () => {
       const result = await onSubmitAuthMeForm()
-      if (result.succeed) updateMyInfo(true, result.data)
+      if (result && result.succeed) updateMyInfo(true, result.data)
     }
 
     onMounted(() => {

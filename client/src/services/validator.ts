@@ -18,7 +18,7 @@ export const isEmail = (str: string, errorMessage = 'Please provide correct form
   }
 }
 
-export const isLengthLowerThan = (str: string, length: number, errorMessage = `Please provide it lower than ${length} characters.`) => {
+export const isLengthLowerThan = (str: string, length: number, errorMessage = `Please provide it in lower than ${length} characters.`) => {
   if (validator.isLength(str, { max: length })) {
     return ''
   } else {

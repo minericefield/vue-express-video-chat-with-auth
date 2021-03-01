@@ -5,4 +5,3 @@ export const connect = (dbName: string): void => {
 }
 
 export const close = () => { mongoose.connection.close() }
-// export const close = mongoose.connection.close
