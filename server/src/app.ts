@@ -41,10 +41,6 @@ app.use(bodyParser.urlencoded({ extended:true }))
 app.use(helmet.hidePoweredBy())
 app.use(noCache())
 
-/**
- * https://github.com/expressjs/csurf/issues/193
- * NOTE: maybe trust proxy needed or even with trust proxy, doesn't work
- */
 app.use(csrf({ cookie: false }))
 
 const staticDir = path.resolve(__dirname, 'client')
