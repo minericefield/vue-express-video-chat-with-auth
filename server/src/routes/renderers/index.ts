@@ -39,7 +39,7 @@ export const Renderers = (staticDir: string) => {
   router.get('/login', render)
   router.get('/register', render)
   router.get('/verify/:userHash', verify, render)
-  router.get('/me', render)
+  router.get('/me', redirectLoginWhenNotRegistered, render)
 
   return router
 }
