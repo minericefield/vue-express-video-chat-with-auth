@@ -44,10 +44,11 @@ app.use(noCache())
 app.use(csrf({ cookie: false }))
 
 const staticDir = path.resolve(__dirname, 'client')
-app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
 
 app.use(Renderers(staticDir))
 app.use(Api.authRouter)
 app.use(Api.userRouter)
+
+app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
 
 export default app
