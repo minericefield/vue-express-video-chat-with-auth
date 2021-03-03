@@ -43,7 +43,7 @@ app.use(noCache())
 
 app.use(csrf({ cookie: false }))
 
-const staticDir = path.resolve(__dirname, 'client')
+const staticDir = path.resolve(__dirname, 'public')
 
 app.use(Renderers(staticDir))
 app.use(Api.authRouter)
