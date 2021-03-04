@@ -13,6 +13,7 @@ import { Renderers, Api } from './routes'
 
 const app = express()
 
+app.disable('x-powered-by')
 const RedisStore = connectRedis(expressSession)
 const redisClient = redis.createClient(6379, process.env.REDIS_HOST, {
   prefix: process.env.REDIS_PREFIX
@@ -38,7 +39,7 @@ app.use(expressSession({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:true }))
 
-app.use(helmet.hidePoweredBy())
+// app.use(helmet.hidePoweredBy())
 app.use(noCache())
 
 app.use(csrf({ cookie: false }))
