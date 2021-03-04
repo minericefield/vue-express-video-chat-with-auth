@@ -6,7 +6,6 @@ import expressSession from 'express-session'
 import csrf from 'csurf'
 import connectRedis from 'connect-redis'
 import redis from 'redis'
-import helmet from 'helmet'
 import noCache from 'nocache'
 
 import { Renderers, Api } from './routes'
@@ -14,6 +13,8 @@ import { Renderers, Api } from './routes'
 const app = express()
 
 app.disable('x-powered-by')
+app.disable('etag')
+
 const RedisStore = connectRedis(expressSession)
 const redisClient = redis.createClient(6379, process.env.REDIS_HOST, {
   prefix: process.env.REDIS_PREFIX
@@ -50,6 +51,6 @@ app.use(Renderers(staticDir))
 app.use(Api.authRouter)
 app.use(Api.userRouter)
 
-app.use(express.static(staticDir, { index: 'none' })) // disable default static index.html to handle rewriting index.html on top root
+app.use(express.static(staticDir, { index: 'none', etag: false })) // disable default static index.html to handle rewriting index.html on top root
 
 export default app

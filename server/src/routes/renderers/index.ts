@@ -29,6 +29,7 @@ export const Renderers = (staticDir: string) => {
       `<meta name="csrf-token" content="">`, 
       `<meta name="csrf-token" content="${req.csrfToken()}">`
     )
+    res.removeHeader('ETag')
     res.send(generatedDoc)
   }
 
