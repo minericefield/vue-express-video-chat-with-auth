@@ -8,12 +8,14 @@ import connectRedis from 'connect-redis'
 import redis from 'redis'
 import noCache from 'nocache'
 
+import { header } from './middlewares/'
 import { Renderers, Api } from './routes'
 
 const app = express()
 
-app.disable('x-powered-by')
-app.disable('etag')
+// app.disable('x-powered-by')
+// app.disable('etag')
+app.use(header)
 
 const RedisStore = connectRedis(expressSession)
 const redisClient = redis.createClient(6379, process.env.REDIS_HOST, {

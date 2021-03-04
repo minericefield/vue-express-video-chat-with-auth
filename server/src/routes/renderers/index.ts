@@ -5,7 +5,7 @@ import path from 'path'
 import {
   redirectLoginWhenNotRegistered,
   verify
-} from '../../middlewares/Auth'
+} from '../../middlewares/'
 
 export const Renderers = (staticDir: string) => {
   const buildingMessage = 'building now...'
@@ -29,7 +29,6 @@ export const Renderers = (staticDir: string) => {
       `<meta name="csrf-token" content="">`, 
       `<meta name="csrf-token" content="${req.csrfToken()}">`
     )
-    res.removeHeader('ETag')
     res.send(generatedDoc)
   }
 
