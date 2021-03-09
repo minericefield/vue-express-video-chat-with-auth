@@ -1,0 +1,134 @@
+openapi: 3.0.0
+
+info:
+  title: Api Definitions
+  description: Only for Api
+  version: 0.1.0.0
+
+paths:
+  /api/auth:
+    get:
+      summary: Check if your account is active
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+    post:
+      summary: Create your account
+      requestBody:
+        description: params to register account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: succeed
+          
+    put:
+      summary: Login
+      requestBody:
+        description: params to login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+    
+    delete:
+      summary: Logout
+      responses:
+        '200':
+          description: succeed
+  
+  /api/auth/resend:
+    post:
+      summary: Resend verification email
+      requestBody:
+        description: params to resend email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendRequest'
+      responses:
+        '200':
+          description: succeed
+
+  /api/user:
+    put:
+      summary: Update user profile
+      requestBody:
+        description: params to update profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
+      responses:
+        '200':
+          description: succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+    
+    delete:
+      summary: Delete account
+      responses:
+        '200':
+          description: succeed
+
+components:
+  schemas:
+    RegistrationRequest:
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+    LoginRequest:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    ResendRequest:
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    UserResponse:
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      required:
+        - _id
+        - name
+        - email

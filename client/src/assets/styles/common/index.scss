@@ -1,0 +1,26 @@
+.under-lined {
+  text-decoration: underline; 
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg-overlay-color {
+  background-color: rgba(74, 74, 74, .4);
+}
+
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+
+.justify-content-evenly {
+  justify-content: space-evenly;
+}
+
+.text-ellipse {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

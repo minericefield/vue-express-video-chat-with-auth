@@ -1,0 +1,49 @@
+name: lint and test server on push
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+defaults:
+  run:
+    working-directory: server
+
+jobs:
+  lint_and_test_server:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mongo:4.4-bionic
+        env:
+          MONGO_INITDB_DATABASE: vue-express-video-chat
+          MONGO_INITDB_ROOT_USERNAME: admin
+          MONGO_INITDB_ROOT_PASSWORD: password
+      redis:
+        image: redis:6.0-alpine
+      mailhog:
+        image: mailhog/mailhog:v1.0.1
+    container:
+      image:  node:14.15.4-alpine
+      env:
+        NODE_ENV: development
+        HOST: http://localhost:3000
+        DB_HOST: db
+        DB_NAME: vue-express-video-chat
+        DB_AUTH_NAME: admin
+        DB_AUTH_PASSWORD: password
+        REDIS_HOST: redis
+        REDIS_PREFIX: rp
+        SESSION_SECRET: secret
+        CRYPTO_PASSWORD: 5799cdfa10b38bfab23118c9cbd3c8d4
+        EMAIL_FROM: vue-express-video-chat@example.com
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: run lint and test
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install
+      - run: yarn test:unit
+      - run: yarn lint
