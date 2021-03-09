@@ -5,7 +5,7 @@ import path from 'path'
 import {
   redirectLoginWhenNotRegistered,
   verify
-} from '../../middlewares/Auth'
+} from '../../middlewares/'
 
 export const Renderers = (staticDir: string) => {
   const buildingMessage = 'building now...'
