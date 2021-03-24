@@ -12,7 +12,9 @@ import AuthApi from '../api/Auth'
 
 import { isNotEmpty, isEmail, isPassword, areNoErrorsExistInForm } from '../services/validator'
 
-export const useAuthLogin = ({ loader, toasting }: { loader: Loader; toasting: Toasting }, onLoginSucceed: AuthMe["updateMyInfo"]) => { // TODO: better to pass variables as onSuccessLogin and onFailLogin functions
+type Login = ({ loader, toasting }: { loader: Loader; toasting: Toasting }, onLoginSucceed: AuthMe["updateMyInfo"]) => Promise<void>
+
+export const useAuthLogin = () => {
   const userForm = reactive<Form>({
     email: {
       text: '',
@@ -39,7 +41,7 @@ export const useAuthLogin = ({ loader, toasting }: { loader: Loader; toasting: T
     }
   }
 
-  const login = async () => {
+  const login: Login = async ({ loader, toasting }, onLoginSucceed) => {
     loader.displayLoader(true)
     const params = {
       email: userForm.email.text,
@@ -56,9 +58,9 @@ export const useAuthLogin = ({ loader, toasting }: { loader: Loader; toasting: T
     loader.displayLoader(false)
   }
 
-  const onSubmit = async () => {
+  const onSubmit: ((...args: Parameters<Login>) => Promise<void>) = async ({ loader, toasting }, onLoginSucceed) => {
     if (validate()) {
-      await login()
+      await login({ loader, toasting }, onLoginSucceed)
     }
   }
 
@@ -69,3 +71,12 @@ export const useAuthLogin = ({ loader, toasting }: { loader: Loader; toasting: T
     onSubmit
   }
 }
+
+/*
+factory pattern
+const onSubmit: ((...args: Parameters<Login>) => () => Promise<void>) = ({ loader, toasting }, onLoginSucceed) => async () => {
+  if (validate()) {
+    await login({ loader, toasting }, onLoginSucceed)
+  }
+}
+*/

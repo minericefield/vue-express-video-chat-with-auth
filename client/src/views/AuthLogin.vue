@@ -58,13 +58,13 @@ export default defineComponent({
     const toasting = inject(UseToastingKey, toastingDefault)
     const { updateMyInfo } = inject(UseAuthMeKey, authMeDefault)
 
-    const { userForm, onFormUpdate, onSubmit } = useAuthLogin({ loader, toasting }, updateMyInfo)
+    const { userForm, onFormUpdate, onSubmit: onSubmitExec } = useAuthLogin()
 
     return {
       userForm,
 
       onFormUpdate,
-      onSubmit
+      onSubmit: () => { onSubmitExec({ loader, toasting }, updateMyInfo) } 
     }
   }
 })
