@@ -7,7 +7,7 @@
     <router-link 
       to="/"
     >
-      <button @click="onSubmit" class="btn btn-primary">
+      <button class="btn btn-primary">
         Start Application
       </button>
     </router-link>
